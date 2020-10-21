@@ -303,7 +303,7 @@ const rearrangeCards = () => {
 
 // //Helper Function to remove elements
 
-// Initialize the game
+// Get input from user
 const insertNewInputBox = () => {
   const newInput = document.createElement('input');
   newInput.setAttribute('id', '#new-input');
@@ -323,8 +323,7 @@ const insertNewInputBox = () => {
   document.body.appendChild(newButton);
 };
 
-// Get input from user
-
+// Run game below:
 // create new input box
 insertNewInputBox();
 
