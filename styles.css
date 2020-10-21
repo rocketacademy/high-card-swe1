@@ -1,3 +1,25 @@
 body {
   background-color: lightpink;
 }
+.card{
+  margin:10px;
+  padding:10px;
+  background-color: whitesmoke;
+  width:50px;
+  text-align:center;
+  border-radius:8px;
+  display:inline-block;
+}
+.suit{
+  margin: 5px;
+  font-size:20px;
+}
+.name{
+  margin: 5px;
+  font-size:24px;
+  font-weight:bold;
+  font-family:sans-serif;
+}
+.red{
+  color:red;
+}

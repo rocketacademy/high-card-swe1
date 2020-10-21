@@ -98,6 +98,9 @@ const buttonPlayer1 = document.createElement('button');
 const buttonPlayer2 = document.createElement('button');
 // A div element to display information on Game status when necessary
 const divGameStatusInfo = document.createElement('div');
+// A div element to display the cards for each player
+const divCardContainerPlayer1 = document.createElement('div');
+const divCardContainerPlayer2 = document.createElement('div');
 
 // don't write the dom manipulation
 // code inline in the conditional
@@ -106,12 +109,80 @@ const setGameStatusInfo = (message) => {
   divGameStatusInfo.innerText = message;
 };
 
+// Function Reset the elements
+const resetElements = () => {
+  divCardContainerPlayer1.innerHTML = '';
+  divCardContainerPlayer2.innerHTML = '';
+};
+
+/*
+ Function to build the necessary DOM elements for displaying a SINGLE card
+ This function accepts a single card object as input
+ Expected HTML format:
+    <div class="card">
+        <div class="name color">3</div>
+        <div class="suit color">♥️</div>
+    </div>
+ */
+const buildSingleCardElement = (infoSingleCard) => {
+  // Creating the element for storing the card display name
+  // 2 Class names are applicable "name, <color>"
+  const divNameElement = document.createElement('div');
+  divNameElement.classList.add('name', infoSingleCard.color);
+  divNameElement.innerText = infoSingleCard.display;
+
+  // Creating the element for storing the suit symbol of the card
+  // Class = "suit"
+  const divSuitElement = document.createElement('div');
+  divSuitElement.classList.add('suit', infoSingleCard.color);
+  divSuitElement.innerText = infoSingleCard.suitSymbol;
+
+  // The parent element that holds both the display name and suit symbol
+  // This element represents a whole single card
+  // Class name = "card"
+  const divSingleCardElement = document.createElement('div');
+  divSingleCardElement.classList.add('card');
+  divSingleCardElement.appendChild(divNameElement);
+  divSingleCardElement.appendChild(divSuitElement);
+  // Card element is returned from this function
+  return divSingleCardElement;
+};
+
+/**
+ * Function to build a container element to hold and display all the cards drawn by the players
+ * Expected HTML Format:
+ * <div class="card-container-1">
+ *      <div class="card"></div>
+ *      ....
+ * </div>
+ * <div class="card-container-2">
+ *      <div class="card"></div>
+ *      ....
+ * </div>
+ */
+const buildCardContainerPlayer1 = () => {
+  const elemCardPlayer1 = buildSingleCardElement(cardOfPlayer1);
+  divCardContainerPlayer1.classList.add('card-container-1');
+  divCardContainerPlayer1.innerHTML = "Cards with Player-1: </br>";
+  divCardContainerPlayer1.appendChild(elemCardPlayer1);
+  document.body.appendChild(divCardContainerPlayer1);
+};
+
+const buildCardContainerPlayer2 = () => {
+  const elemCardPlayer2 = buildSingleCardElement(cardOfPlayer2);
+  divCardContainerPlayer2.classList.add('card-container-2');
+  divCardContainerPlayer2.innerHTML = "Cards with Player-2: </br>";
+  divCardContainerPlayer2.appendChild(elemCardPlayer2);
+  document.body.appendChild(divCardContainerPlayer2);
+};
+
 // Adding event listener handling functions for the buttons
 
 // Handler function for Player1 Button.
 // Here, it simply takes a card from the deck and tells next turn is of Player2
 const onClickPlayer1Draw = () => {
   if (playersTurn === 1) {
+    resetElements();
     if (deck.length === 0) // if the deck of card is empty, no need to proceed further
     {
       setGameStatusInfo('Deck of cards is empty. Please refresh to start a new game.');
@@ -119,6 +190,7 @@ const onClickPlayer1Draw = () => {
     cardOfPlayer1 = deck.pop();
     setGameStatusInfo(`Player1 card: ${cardOfPlayer1.name} of ${cardOfPlayer1.suit}. Next Turn is of Player 2.`);
     playersTurn = 2;
+    buildCardContainerPlayer1();
   }
   else {
     setGameStatusInfo('Turn of Player 2');
@@ -156,6 +228,7 @@ const onClickPalyer2Draw = () => {
         Player2 card: ${cardOfPlayer2.name} of ${cardOfPlayer2.suit}.
         It's a tie`);
     }
+    buildCardContainerPlayer2();
   }
 };
 
