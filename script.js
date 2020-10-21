@@ -86,6 +86,8 @@ const deck = shuffleCards(makeDeck()); // Deck of whole cards
 
 let playersTurn = 1; // matches with starting instructions
 let inputCardCount = 0;
+let canClick = true;
+const timeoutInMilliSeconds = 1000;
 const cardDeckOfPlayer1 = [];
 const cardDeckOfPlayer2 = [];
 
@@ -367,65 +369,78 @@ const onClickPalyer2DrawMultipleCards = () => {
 };
 
 const onClickPlayerCheckAndDraw = (playerNumber) => {
-  if ((cardDeckOfPlayer1.length === inputCardCount)
-  && (cardDeckOfPlayer2.length !== inputCardCount) && playerNumber === 1)
-  {
-    // If player 1 has reached maximum limit, while payer-2 hasn't
-    setGameStatusInfo(`Player-1 has drawn ${inputCardCount} cards already. Limit reached`);
-    return;
-  }
-  if ((cardDeckOfPlayer1.length !== inputCardCount)
-  && (cardDeckOfPlayer2.length === inputCardCount) && playerNumber === 2)
-  {
-    // If player 1 has reached maximum limit, while payer-2 hasn't
-    setGameStatusInfo(`Player-2 has drawn ${inputCardCount} cards already. Limit reached`);
-    return;
-  }
-  // Check whether the cards are comparable
-  if (areDecksComparable())
-  {
-    compareDecksAndDisplay();
-    cardDeckOfPlayer1.length = 0;
-    cardDeckOfPlayer2.length = 0;
-    return;
-  }
-  if (cardDeckOfPlayer1.length === 0 && cardDeckOfPlayer2.length === 0)
-  {
-    setGameStatusInfo('Starting a new round');
-    resetElements();
-  }
-  if (deck.length === 0) // if the deck of card is empty, no need to proceed further
-  {
-    setGameStatusInfo('Deck of cards is empty. Please refresh to start a new game.');
-  }
-  if (playerNumber === 1)
-  {
-    console.log('Player1 is drawing: ');
-    cardDeckOfPlayer1.push(deck.pop());
-    printToConsole(cardDeckOfPlayer1);
-  }
-  else if (playerNumber === 2)
-  {
-    console.log('Player2 is drawing: ');
-    cardDeckOfPlayer2.push(deck.pop());
-    printToConsole(cardDeckOfPlayer2);
-  }
-  else
+  if (canClick === false)
   {
     return;
   }
-  if (areDecksComparable())
-  {
-    // If both players took enough cards, compare and display all the cards
-    compareDecksAndDisplay();
-    cardDeckOfPlayer1.length = 0;
-    cardDeckOfPlayer2.length = 0;
-    return;
-  }
-  // If one of the player hasn't taken full set of cards,
-  // display whatever cards he has
-  buildCardContainerPlayer1();
-  buildCardContainerPlayer2();
+  canClick = false;
+  setTimeout(() => {
+    if ((cardDeckOfPlayer1.length === inputCardCount)
+    && (cardDeckOfPlayer2.length !== inputCardCount) && playerNumber === 1)
+    {
+      // If player 1 has reached maximum limit, while payer-2 hasn't
+      setGameStatusInfo(`Player-1 has drawn ${inputCardCount} cards already. Limit reached`);
+      canClick = true;
+      return;
+    }
+    if ((cardDeckOfPlayer1.length !== inputCardCount)
+    && (cardDeckOfPlayer2.length === inputCardCount) && playerNumber === 2)
+    {
+      // If player 1 has reached maximum limit, while payer-2 hasn't
+      setGameStatusInfo(`Player-2 has drawn ${inputCardCount} cards already. Limit reached`);
+      canClick = true;
+      return;
+    }
+    // Check whether the cards are comparable
+    if (areDecksComparable())
+    {
+      compareDecksAndDisplay();
+      cardDeckOfPlayer1.length = 0;
+      cardDeckOfPlayer2.length = 0;
+      canClick = true;
+      return;
+    }
+    if (cardDeckOfPlayer1.length === 0 && cardDeckOfPlayer2.length === 0)
+    {
+      setGameStatusInfo('Starting a new round');
+      resetElements();
+    }
+    if (deck.length === 0) // if the deck of card is empty, no need to proceed further
+    {
+      setGameStatusInfo('Deck of cards is empty. Please refresh to start a new game.');
+    }
+    if (playerNumber === 1)
+    {
+      console.log('Player1 is drawing: ');
+      cardDeckOfPlayer1.push(deck.pop());
+      printToConsole(cardDeckOfPlayer1);
+    }
+    else if (playerNumber === 2)
+    {
+      console.log('Player2 is drawing: ');
+      cardDeckOfPlayer2.push(deck.pop());
+      printToConsole(cardDeckOfPlayer2);
+    }
+    else
+    {
+      canClick = true;
+      return;
+    }
+    if (areDecksComparable())
+    {
+      // If both players took enough cards, compare and display all the cards
+      compareDecksAndDisplay();
+      cardDeckOfPlayer1.length = 0;
+      cardDeckOfPlayer2.length = 0;
+      canClick = true;
+      return;
+    }
+    // If one of the player hasn't taken full set of cards,
+    // display whatever cards he has
+    buildCardContainerPlayer1();
+    buildCardContainerPlayer2();
+    canClick = true;
+  }, timeoutInMilliSeconds);
 };
 
 // Function that initializes the Game. Should be invoked in the beginning
