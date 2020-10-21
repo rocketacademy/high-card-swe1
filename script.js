@@ -85,6 +85,7 @@ const makeDeck = () => {
 const deck = shuffleCards(makeDeck()); // Deck of whole cards
 
 let playersTurn = 1; // matches with starting instructions
+let inputCardCount = 0;
 const cardDeckOfPlayer1 = [];
 const cardDeckOfPlayer2 = [];
 
@@ -95,6 +96,8 @@ Creating buttons and other elements and adding it to the html in the required or
 const divInputContainer = document.createElement('div');
 // An input element to get the count of the cards to be drawn
 const inputCardCountElement = document.createElement('input');
+// A button to submit the count entered by the user
+const inputCountSubmitButton = document.createElement('button');
 // A div element for separating the buttons
 const divButtonContainer = document.createElement('div');
 // A button for Player1
@@ -266,12 +269,12 @@ const onClickPalyer2DrawSingleCard = () => {
 // Function to get the required number of cards from the deck to fill the specified player deck
 const getCardsFromDeck = (cardDeckOfPlayer) => {
 // if the deck of card is less than the count of cards needed, no need to proceed further
-  if (deck.length <= inputCardCountElement.valueAsNumber)
+  if (deck.length <= inputCardCount)
   {
     setGameStatusInfo('Not enough cards in the Deck. Please refresh to start a new game.');
     return;
   }
-  for (let i = 0; i < inputCardCountElement.valueAsNumber; i += 1)
+  for (let i = 0; i < inputCardCount; i += 1)
   {
     cardDeckOfPlayer.push(deck.pop());
   }
@@ -347,6 +350,13 @@ const gameInit = () => {
   inputCardCountElement.setAttribute('type', 'number');
   inputCardCountElement.placeholder = 'Enter no: of cards';
   divInputContainer.appendChild(inputCardCountElement);
+
+  // Set details to input count button
+  inputCountSubmitButton.innerText = 'Submit Count';
+  inputCountSubmitButton.addEventListener('click', () => {
+    inputCardCount = inputCardCountElement.valueAsNumber;
+  });
+  divInputContainer.appendChild(inputCountSubmitButton);
 
   // Append both the buttons to the div element and add to the html
   // button1
