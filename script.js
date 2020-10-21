@@ -27,7 +27,52 @@ player1HandContainer.classList.add('player-hand-container');
 const player2HandContainer = document.createElement('div');
 player2HandContainer.classList.add('player-hand-container');
 
-// Helper functions ------------------------------------------
+// Helper functions --------------------------------------------
+// reorder player's hand array
+// (1st index with highest rank card and 2nd index with lowest rank card)
+const reorderPlayerHand = (hand) => {
+  let highestCardRank = 0;
+  let lowestCardRank = 0;
+  let highestCardIndex = 0;
+  let lowestCardIndex = 0;
+  const reorderedHand = [];
+
+  // find indexes of highest and lowest cards
+  for (let i = 0; i < hand.length; i += 1) {
+    if (i === 0) {
+      // make the 1st card in hand the lowest and highest card rank
+      lowestCardRank = hand[0].rank;
+      highestCardRank = hand[0].rank;
+    } else if (hand[i].rank > highestCardRank) {
+      highestCardRank = hand[i].rank;
+      highestCardIndex = i;
+    } else if (hand[i].rank < lowestCardRank) {
+      lowestCardRank = hand[i].rank;
+      lowestCardIndex = i;
+    }
+  }
+  console.log(`highestCard: ${hand[highestCardIndex].rank}`);
+  console.log(`lowestCard: ${hand[lowestCardIndex].rank}`);
+  console.log(`highestCardIndex: ${highestCardIndex}`);
+  console.log(`lowestCardIndex: ${lowestCardIndex}`);
+
+  // create reordered hand: 1st index with highest rank card and 2nd index with lowest rank card
+  reorderedHand.push(hand[highestCardIndex]);
+  reorderedHand.push(hand[lowestCardIndex]);
+  for (let j = 0; j < hand.length; j += 1) {
+    if (j != highestCardIndex && j != lowestCardIndex) {
+      reorderedHand.push(hand[j]);
+    }
+  }
+
+  return reorderedHand;
+};
+
+// clear cards' display in each players' hand container elements
+const clearPlayerHandContainer = (playerHandContainer) => {
+  playerHandContainer.innerHTML = '';
+};
+
 // get a random index from an array given it's size
 const getRandomIndex = (size) => Math.floor(Math.random() * size);
 
@@ -187,9 +232,25 @@ const player1Click = () => {
 
       player1Hand.push(player1Card);
 
+      // create card display and display it
       const cardElement = makeCardElement(player1Card);
-
       player1HandContainer.appendChild(cardElement);
+
+      // If player1 has at least 2 cards...
+      if (player1Hand.length > 1) {
+        // reorder player1Hand
+        const reorderedPlayer1Hand = reorderPlayerHand(player1Hand);
+
+        // remove current display of player1's hand
+        clearPlayerHandContainer(player1HandContainer);
+
+        // display reordered player1Hand
+        for (let i = 0; i < reorderedPlayer1Hand.length; i += 1) {
+          const reorderedCardElement = makeCardElement(reorderedPlayer1Hand[i]);
+
+          player1HandContainer.appendChild(reorderedCardElement);
+        }
+      }
 
       // let game know it is 2nd player's turn
       playersTurn = 2;
@@ -211,9 +272,25 @@ const player2Click = () => {
 
       player2Hand.push(player2Card);
 
+      // create card display and display it
       const cardElement = makeCardElement(player2Card);
-
       player2HandContainer.appendChild(cardElement);
+
+      // If player2 has at least 2 cards...
+      if (player2Hand.length > 1) {
+      // reorder player2Hand
+        const reorderedPlayer2Hand = reorderPlayerHand(player2Hand);
+
+        // remove current display of player1's hand
+        clearPlayerHandContainer(player2HandContainer);
+
+        // display reordered player1Hand
+        for (let i = 0; i < reorderedPlayer2Hand.length; i += 1) {
+          const reorderedCardElement = makeCardElement(reorderedPlayer2Hand[i]);
+
+          player2HandContainer.appendChild(reorderedCardElement);
+        }
+      }
 
       const playerCardsOutput = `Player 1 drew ${player1Card.name} of ${player1Card.suit}. Player 2 drew ${player2Card.name} of ${player2Card.suit}.`;
 
