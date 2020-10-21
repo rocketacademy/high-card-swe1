@@ -1,3 +1,51 @@
-body {
+body{
   background-color:pink;
+}
+/* .red{
+  color: red;
+}
+
+.black{
+  color:black;
+} */
+
+.cardFormat{
+display: inline-block;
+width: 30px;
+background-color: white;
+border: solid black;
+border-width: 1px 
+margin: 3px;
+
+} 
+
+.card{
+    margin:10px;
+    padding:10px;
+    background-color:grey;
+    width:50px;
+    text-align:center;
+    border-color: solid black;
+    border-radius:8px;
+    display:inline-block;
+}
+.suit{
+    margin: 5px;
+    font-size:20px;
+}
+.name{
+    margin: 5px;
+    font-size:24px;
+    font-weight:bold;
+    font-family:sans-serif;
+}
+.red{
+    color:red;
+}
+
+.gameInfo{
+  border: solid black;
+  border-width: 1px
+  margin:5px;
+
 }
