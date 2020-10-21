@@ -218,10 +218,10 @@ const getPlayerWithGreatestDifference = () => {
   return result;
 };
 
-// Global setup 2: variables that cant be initilized in GLobal setup 1----
+// Global setup 2: variables that cant be initilized in GLobal setup 1-------
 const deck = shuffleCards(makeDeck());
 
-// Player action callbacks --------------------------------
+// Player action callbacks --------------------------------------------------
 const player1Click = () => {
   if (playersTurn === 1 && canClick === true) {
     canClick = false;
@@ -353,6 +353,7 @@ const gameInit = () => {
   });
   player2Button.addEventListener('click', () => {
     if (deck.length === 0) {
+      // end game if no more cards in deck
       output(`There are no more cards in the deck. ${playerWon} won!`);
     } else { player2Click(); }
   });
