@@ -286,10 +286,10 @@ const comparePlayerDecks = () => {
   cardDeckOfPlayer1.sort((card1, card2) => (card1.rank - card2.rank));
   cardDeckOfPlayer2.sort((card1, card2) => (card1.rank - card2.rank));
 
-  //   console.log('Player1 Cards: ');
-  //   printToConsole(cardDeckOfPlayer1);
-  //   console.log('Player2 Cards: ');
-  //   printToConsole(cardDeckOfPlayer2);
+  // console.log('Player1 Cards: ');
+  // printToConsole(cardDeckOfPlayer1);
+  // console.log('Player2 Cards: ');
+  // printToConsole(cardDeckOfPlayer2);
 
   // Find the difference between the highest and lowest cards of each player.
   const rankDiffOfPlayer1 = (cardDeckOfPlayer1.length === 0) ? 0
@@ -311,6 +311,11 @@ const comparePlayerDecks = () => {
   else {
     setGameStatusInfo('It\'s a tie');
   }
+
+  // Rearranging the deck of each player to display the cards so that
+  // the 2 most winningest cards are displayed next to each other in the row.
+  cardDeckOfPlayer1.unshift(cardDeckOfPlayer1.pop());
+  cardDeckOfPlayer2.unshift(cardDeckOfPlayer2.pop());
 };
 
 // Button handler function to draw multiple cards
@@ -319,6 +324,7 @@ const onClickPlayer1DrawMultipleCards = () => {
     cardDeckOfPlayer1.length = 0;
     resetElements();
     getCardsFromDeck(cardDeckOfPlayer1);
+    // printToConsole(cardDeckOfPlayer1);
     setGameStatusInfo('Next Turn is of Player 2.');
     playersTurn = 2;
     buildCardContainerPlayer1();
@@ -337,6 +343,7 @@ const onClickPalyer2DrawMultipleCards = () => {
     // Compare the ranks of the cards with the 2 players.
     // Player with a high card rank difference wins
     comparePlayerDecks();
+    buildCardContainerPlayer1();
     buildCardContainerPlayer2();
   }
   else {
