@@ -1,5 +1,5 @@
 body {
-  background-color: lightpink;
+  background-color: mistyrose;
 }
 .card{
   margin:10px;
@@ -22,4 +22,12 @@ body {
 }
 .red{
   color:red;
+}
+
+.status{
+  color: deeppink;
+  font-weight: bold;
+  font-style: italic;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+
 }

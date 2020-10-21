@@ -204,7 +204,6 @@ const buildCardContainerPlayer2 = () => {
     divCardContainerPlayer2.appendChild(elemCardPlayer2);
   }
   document.body.appendChild(divCardContainerPlayer2);
-  cardDeckOfPlayer2.length = 0;
 };
 
 // Adding event listener handling functions for the buttons
@@ -318,13 +317,20 @@ const comparePlayerDecks = () => {
   cardDeckOfPlayer2.unshift(cardDeckOfPlayer2.pop());
 };
 
+// Function to compare the deck of card of the 2 palyers and build the output container
+const compareDecksAndDisplay = () => {
+  comparePlayerDecks();
+  buildCardContainerPlayer1();
+  buildCardContainerPlayer2();
+};
+
 // Button handler function to draw multiple cards
 const onClickPlayer1DrawMultipleCards = () => {
   if (playersTurn === 1) {
     cardDeckOfPlayer1.length = 0;
     resetElements();
     getCardsFromDeck(cardDeckOfPlayer1);
-    // printToConsole(cardDeckOfPlayer1);
+
     setGameStatusInfo('Next Turn is of Player 2.');
     playersTurn = 2;
     buildCardContainerPlayer1();
@@ -332,6 +338,17 @@ const onClickPlayer1DrawMultipleCards = () => {
   else {
     setGameStatusInfo('Turn of Player 2');
   }
+};
+
+const areDecksComparable = () => {
+  // both the players has reached the maximum limit,
+  // proceed with Card comparison and displaying result
+  if ((cardDeckOfPlayer1.length === inputCardCount)
+  && (cardDeckOfPlayer2.length === inputCardCount))
+  {
+    return true;
+  }
+  return false;
 };
 
 const onClickPalyer2DrawMultipleCards = () => {
@@ -342,13 +359,73 @@ const onClickPalyer2DrawMultipleCards = () => {
     playersTurn = 1;
     // Compare the ranks of the cards with the 2 players.
     // Player with a high card rank difference wins
-    comparePlayerDecks();
-    buildCardContainerPlayer1();
-    buildCardContainerPlayer2();
+    compareDecksAndDisplay();
   }
   else {
     setGameStatusInfo('Turn of Player 1');
   }
+};
+
+const onClickPlayerCheckAndDraw = (playerNumber) => {
+  if ((cardDeckOfPlayer1.length === inputCardCount)
+  && (cardDeckOfPlayer2.length !== inputCardCount) && playerNumber === 1)
+  {
+    // If player 1 has reached maximum limit, while payer-2 hasn't
+    setGameStatusInfo(`Player-1 has drawn ${inputCardCount} cards already. Limit reached`);
+    return;
+  }
+  if ((cardDeckOfPlayer1.length !== inputCardCount)
+  && (cardDeckOfPlayer2.length === inputCardCount) && playerNumber === 2)
+  {
+    // If player 1 has reached maximum limit, while payer-2 hasn't
+    setGameStatusInfo(`Player-2 has drawn ${inputCardCount} cards already. Limit reached`);
+    return;
+  }
+  // Check whether the cards are comparable
+  if (areDecksComparable())
+  {
+    compareDecksAndDisplay();
+    cardDeckOfPlayer1.length = 0;
+    cardDeckOfPlayer2.length = 0;
+    return;
+  }
+  if (cardDeckOfPlayer1.length === 0 && cardDeckOfPlayer2.length === 0)
+  {
+    setGameStatusInfo('Starting a new round');
+    resetElements();
+  }
+  if (deck.length === 0) // if the deck of card is empty, no need to proceed further
+  {
+    setGameStatusInfo('Deck of cards is empty. Please refresh to start a new game.');
+  }
+  if (playerNumber === 1)
+  {
+    console.log('Player1 is drawing: ');
+    cardDeckOfPlayer1.push(deck.pop());
+    printToConsole(cardDeckOfPlayer1);
+  }
+  else if (playerNumber === 2)
+  {
+    console.log('Player2 is drawing: ');
+    cardDeckOfPlayer2.push(deck.pop());
+    printToConsole(cardDeckOfPlayer2);
+  }
+  else
+  {
+    return;
+  }
+  if (areDecksComparable())
+  {
+    // If both players took enough cards, compare and display all the cards
+    compareDecksAndDisplay();
+    cardDeckOfPlayer1.length = 0;
+    cardDeckOfPlayer2.length = 0;
+    return;
+  }
+  // If one of the player hasn't taken full set of cards,
+  // display whatever cards he has
+  buildCardContainerPlayer1();
+  buildCardContainerPlayer2();
 };
 
 // Function that initializes the Game. Should be invoked in the beginning
@@ -373,16 +450,24 @@ const gameInit = () => {
   buttonPlayer2.innerText = 'Player-2 Draw';
   divButtonContainer.appendChild(buttonPlayer2);
 
+  // Add a class to game status
+  divGameStatusInfo.classList.add('status');
+
   // Event listeners for both the buttons
   //   buttonPlayer1.addEventListener('click', onClickPlayer1DrawSingleCard);
   //   buttonPlayer2.addEventListener('click', onClickPalyer2DrawSingleCard);
 
-  // To handle the case for drawing multiple cards by each user.
-  // Count is decided by the input specified
-  buttonPlayer1.addEventListener('click', onClickPlayer1DrawMultipleCards);
-  buttonPlayer2.addEventListener('click', onClickPalyer2DrawMultipleCards);
+  //   // To handle the case for drawing multiple cards by each user.
+  //   // Count is decided by the input specified
+  //   buttonPlayer1.addEventListener('click', onClickPlayer1DrawMultipleCards);
+  //   buttonPlayer2.addEventListener('click', onClickPalyer2DrawMultipleCards);
 
-  divGameStatusInfo.innerText = 'It\'s the turn of Player1. Click to draw a card!';
+  // To handle the case in which players can draw in any order
+  // until the set number of cards has been drawn.
+  buttonPlayer1.addEventListener('click', () => { onClickPlayerCheckAndDraw(1); });
+  buttonPlayer2.addEventListener('click', () => { onClickPlayerCheckAndDraw(2); });
+
+  // divGameStatusInfo.innerText = 'It\'s the turn of Player1. Click to draw a card!';
 
   // Adding components to the documnent in order
   // Adding input container to document
