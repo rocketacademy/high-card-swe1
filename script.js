@@ -96,12 +96,15 @@ const deck = shuffleCards(makeDeck());
 
 let playersTurn = 1; // Player 1 starts first
 let player1Card; // Use let for player1Card object because player1Card will be reassigned
+let player1Diff;
 
 const player1Button = document.createElement('button');
 const player2Button = document.createElement('button');
 const gameInfo = document.createElement('div');
 const cardTable = document.createElement('div');
 const cardContainer = document.createElement('div');
+const player1Container = document.createElement('div');
+const player2Container = document.createElement('div');
 const buttonsContainer = document.createElement('div');
 
 // Function 4: Game Initialization
@@ -112,6 +115,11 @@ const initGame = () => {
   cardTable.appendChild(cardContainer);
   cardTable.appendChild(gameInfo);
   cardTable.classList.add('table');
+  cardContainer.appendChild(player1Container);
+  cardContainer.appendChild(player2Container);
+  cardContainer.classList.add('cardContainer');
+  player1Container.classList.add('playercontainers');
+  player2Container.classList.add('playercontainers');
   buttonsContainer.classList.add('buttonsContainer');
 
   // fill game info div with starting instructions
@@ -152,17 +160,24 @@ const createCard = (cardInfo) => {
 // create a helper function for output to abstract complexity
 // of DOM manipulation away from game logic
 const output = (message) => {
-  gameInfo.innerText = '';
-  gameInfo.innerText = message;
+  gameInfo.innerHTML = '';
+  gameInfo.innerHTML = message;
 };
 
 // Player Action Callback functions
 const player1Click = () => {
   if (playersTurn === 1) {
-    cardContainer.innerHTML = '';
-
+    player1Container.innerHTML = '';
+    player2Container.innerHTML = '';
     player1Card = deck.pop();
-    cardContainer.appendChild(createCard(player1Card));
+    const player1Card2 = deck.pop();
+    if (player1Card.rank > player1Card2.rank) {
+      player1Diff = player1Card.rank - player1Card2.rank;
+    } else {
+      player1Diff = player1Card2.rank - player1Card.rank;
+    }
+    player1Container.appendChild(createCard(player1Card));
+    player1Container.appendChild(createCard(player1Card2));
     playersTurn = 2;
     output('Player 2 turn');
   }
@@ -171,15 +186,25 @@ const player1Click = () => {
 const player2Click = () => {
   if (playersTurn === 2) {
     const player2Card = deck.pop();
-    cardContainer.appendChild(createCard(player2Card));
+    const player2Card2 = deck.pop();
+    let player2Diff;
+    if (player2Card.rank > player2Card2.rank) {
+      player2Diff = player2Card.rank - player2Card2.rank;
+    } else {
+      player2Diff = player2Card2.rank - player2Card.rank;
+    }
+    player2Container.appendChild(createCard(player2Card));
+    player2Container.appendChild(createCard(player2Card2));
     playersTurn = 1;
 
-    // const endMsg = " Player 1 can draw to continue"
+    const endMsg = `</br> Player 1: ${player1Diff} </br> Player 2: ${player2Diff}`;
+    console.log(player1Diff);
+    console.log(player2Diff);
 
-    if (player1Card.rank > player2Card.rank) {
-      output('player 1 wins');
-    } else if (player1Card.rank < player2Card.rank) {
-      output('player 2 wins');
+    if (player1Diff > player2Diff) {
+      output(`player 1 wins ${endMsg}`);
+    } else if (player1Diff < player2Diff) {
+      output(`player 2 wins ${endMsg}`);
     } else {
       output('tie');
     }

@@ -1,7 +1,8 @@
 body {
   background-color: pink;
 }
-
+/* For generating the card 
+do not touch */
 .card {
   margin: 10px;
   padding: 10px;
@@ -30,25 +31,30 @@ body {
   color: black;
 }
 
+/* For generating the table */
 .table {
   min-height: 150px;
   margin: 10px;
-  padding: 10px;
-  background-color: green;
+  padding: 25px;
+  border-width: 10px;
   border-color: brown;
+  border-style: solid;
+  background-color: green;
   position: relative;
-  display: flex;
+  display: block;
   justify-content: center;
 }
 
 .textbox {
   text-align: center;
-  margin: 10px;
+  margin: auto;
   width: 50%;
   padding: 10px;
   background-color: grey;
-  position: absolute;
-  bottom: 0;
+  display: block;
+  justify-content: center;
+  /* position: absolute;
+  bottom: 0; */
 }
 
 .button {
@@ -60,4 +66,24 @@ body {
 .buttonsContainer {
   display: flex;
   justify-content: center;
+}
+
+.cardContainer {
+  margin: 0px;
+  width: 100%;
+  border: 5px;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  /* background-color: blue; */
+}
+
+.playercontainers {
+  width: 40%;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.418);
+  display: inline-block;
+  text-align: center;
 }
