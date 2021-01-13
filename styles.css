@@ -3,7 +3,7 @@ body {
 }
 
 .table {
-  height: 250px;
+  height: 400px;
   width: 580px;
   border: 8px solid #c26e00a8;
   border-radius: 12px;
@@ -29,11 +29,49 @@ body {
   display: inline-block;
 }
 
-.card-div {
+.card1-div {
   background-color: rgb(161, 4, 4);
   border-radius: 20px;
   opacity: 80%;
   text-align: center;
+  margin: 10px;
+}
+
+.card2-div {
+  background-color: rgb(3, 14, 114);
+  border-radius: 20px;
+  opacity: 80%;
+  text-align: center;
+  margin: 10px;
+}
+
+.score-div {
+  height: 120px;
+  width: 600px;
+}
+
+.score1-span {
+  height: 80px;
+  width: 290px;
+  background-color: rgb(161, 4, 4);
+  border-radius: 10px;
+  margin: 5px 10px 0 5px;
+  display: inline-block;
+  color: white;
+  text-align: center;
+  font-family: Impact;
+}
+
+.score2-span {
+  height: 80px;
+  width: 290px;
+  background-color: rgb(3, 14, 114);
+  border-radius: 10px;
+  margin-top: 5px;
+  display: inline-block;
+  color: white;
+  text-align: center;
+  font-family: Impact;
 }
 
 .buttons-div {
@@ -42,13 +80,28 @@ body {
   text-align: center;
 }
 
-.player-button {
-  background-color: #555555;
+.player1-button {
+  background-color: #ff1f1f;
   color: white;
   font-family: Arial;
   border-radius: 12px;
   margin: 11px;
   padding: 8px 11px 8px 11px;
+}
+
+.player2-button {
+  background-color: #143ef8;
+  color: white;
+  font-family: Arial;
+  border-radius: 12px;
+  margin: 11px;
+  padding: 8px 11px 8px 11px;
+}
+
+.player-scores {
+  font-size: 20px;
+  font-family: Impact;
+  color: rgb(255, 187, 0);
 }
 
 .suit {

@@ -1,4 +1,4 @@
-// High Card V1
+// High Card V2
  
 const getRandomIndex = arraySize => Math.floor(Math.random() * arraySize);
 
@@ -95,10 +95,6 @@ const createCard = (cardInfo) => {
   return card;
 };
 
-// Global variables
-const deck = shuffleCards(makeDeck());
-
-
 // Create element function
 const customCreate = (tagName, className) => {
   const element = document.createElement(tagName);
@@ -107,30 +103,59 @@ const customCreate = (tagName, className) => {
   return element;
 }
 
+// Global variables
+const deck = shuffleCards(makeDeck());
+
 // Create card variables outside function scope to compare them in player1Click() & player2Click()
 let playersTurn = 1;
 let player1Card;
 let player2Card;
 
-const player1Button = customCreate('button', 'player-button');
-const player2Button = customCreate('button', 'player-button');
+// Create arrays to track player1 & player2 scores
+let player1CardArr = [];
+let player2CardArr = [];
+
+// Create buttons for player 1 & 2 with customCreate() function
+const player1Button = customCreate('button', 'player1-button');
+const player2Button = customCreate('button', 'player2-button');
 
 // Create game info on whose turn, render it to the Table
 const gameInfo = customCreate('div', 'game-info');
 const table = customCreate('div', 'table');
 
 // Create a red mat for cards to be displayed
-const cardsDiv = customCreate('div', 'card-div');
-table.appendChild(cardsDiv);
+const cards1Div = customCreate('div', 'card1-div');
+table.appendChild(cards1Div);
+const cards2Div = customCreate('div', 'card2-div');
+table.appendChild(cards2Div);
 
-// Append player1 & player2 buttons into the button div which will be appended to the table
+// Create a score board below the table 
+const scoreDiv = customCreate('div', 'score-div');
+const scoreBoard1 = customCreate('span', 'score1-span');
+scoreBoard1.innerHTML = "<br>" + "Player 1 Score :"    + "<br>"
+const scoreBoard2 = customCreate('span', 'score2-span');
+scoreBoard2.innerHTML = "<br>" +  "Player 2 Score :"    + "<br>"
+
+
+// Append player1 & player2 buttons into the buttonsDiv which will be appended to the table
 const buttonsDiv = customCreate('div', 'buttons-div');
-
 
 // Render game information to the DOM
 const output = (message) => {
   gameInfo.innerText = message;
 };
+
+const sumCardsArr = (playerArr) => {
+  let sum = 0;
+  for (let i = 0; i < playerArr.length ; i++) {
+      sum += Number(playerArr[i].rank);
+  }
+  return sum;
+}
+
+// Create the scores that reflect the cards
+const player1CurrScore = customCreate('span', 'player-scores');
+const player2CurrScore = customCreate('span', 'player-scores');
 
 // Player Action Callbacks
 const player1Click = () => {
@@ -138,12 +163,19 @@ const player1Click = () => {
 
   if (playersTurn === 1) {
     // Retrieve card from the shuffled deck
-    player1Card = deck.pop();
+    let randomCard = deck.pop();
+    player1Card = randomCard
+    player1CardArr.push(randomCard);
 
     // Use createCard() function to create a <div> element containing more <div> for the card
     let domCard = createCard(player1Card);
-    cardsDiv.appendChild(domCard);
-    table.appendChild(cardsDiv);
+    cards1Div.appendChild(domCard);
+    table.appendChild(cards1Div);
+
+    // Update the scoreboards below the table that reflect the cards
+    player1CurrScore.innerHTML = ''
+    player1CurrScore.innerHTML = sumCardsArr(player1CardArr);
+    scoreBoard1.appendChild(player1CurrScore)
 
     playersTurn = 2;
   }
@@ -153,18 +185,28 @@ const player2Click = () => {
   if (playersTurn === 2) {
     gameInfo.innerText = "It's Player 1 turn. Click to draw a card!";
 
-    const player2Card = deck.pop();
+    let randomCard = deck.pop();
+    player2Card = randomCard;
+    player2CardArr.push(randomCard);
 
     // Use createCard() function to create a <div> element containing more <div> for the card
     let domCard = createCard(player2Card);
-    cardsDiv.appendChild(domCard);
-    table.appendChild(cardsDiv);
+    cards2Div.appendChild(domCard);
+    table.appendChild(cards2Div);
+
+    let sumPlayer2Score =  sumCardsArr(player2CardArr)
+
+    // Update the scoreboards below the table that reflect the cards
+    player2CurrScore.innerHTML = '';
+    player2CurrScore.innerHTML = sumPlayer2Score;
+    scoreBoard2.appendChild(player2CurrScore)
 
     playersTurn = 1;
-  
-    if (player1Card.rank > player2Card.rank) {
+    
+    // Since Player 2 comes after Player 1, compare scores after Player 2 turn
+    if (sumCardsArr(player1CardArr) > sumPlayer2Score ) {
       output('Player 1 Wins!');
-    } else if (player1Card.rank < player2Card.rank) {
+    } else if (sumCardsArr(player1CardArr) < sumPlayer2Score) {
       output('Player 2 Wins!');
     } else {
       output('Tie!');
@@ -190,5 +232,10 @@ const initGame = () => {
   player2Button.addEventListener('click', player2Click);
 };
 
+// Append relevant elements to the DOM
 document.body.appendChild(table);
+scoreDiv.appendChild(scoreBoard1);
+scoreDiv.appendChild(scoreBoard2);
+document.body.appendChild(scoreDiv);
+
 initGame();
