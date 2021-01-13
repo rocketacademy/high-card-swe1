@@ -117,13 +117,30 @@ const createCard = (cardInfo) => {
 
 const deck = shuffleCards(makeDeck());
 
+const cardInfo = {
+  suitSymbol: '♦️',
+  suit: 'diamond',
+  name: 'queen',
+  display: 'Q',
+  color: 'red',
+  rank: 12,
+}
+
 const player1Click = () => {
-  if (playersTurn === 1) {
-    player1Card = deck.pop();
-    cardContainer.innerHTML = ''
-    cardContainer.appendChild(createCard(player1Card));
-    playersTurn = 2;
+  if (playersTurn === 1 && canClick === true) {
+    canClick = false;
+
+    setTimeout(() => {
+      player1Card = deck.pop();
+      cardContainer.innerHTML = ''
+      cardContainer.appendChild(createCard(player1Card));
+      playersTurn = 2;
+      canClick = true
+    }, 500);
   }
+  setTimeout(() => {
+    output("It's player 2's turn. Click to draw a card")
+  }, 1000);
 };
 
 const player2Click = () => {
@@ -140,12 +157,16 @@ const player2Click = () => {
       output('tie');
     }
   }
+  setTimeout(() => {
+    output("It's player 1's turn. Click to draw a card!")
+  }, 1500)
 };
 
 
 let player1Card
 let playersTurn = 1; // matches with starting instructions
 let cardContainer;
+let canClick = true
 
 //creating permanent elements
 const mainDiv = document.createElement('div')
@@ -171,9 +192,10 @@ const initGame = () => {
   player2Button.addEventListener('click', () => {player2Click()});
 
   // fill game info div with starting instructions
-  gameInfo.innerText = 'Its player 1 turn. Click to draw a card!';
+  gameInfo.innerText = "It's player 1's turn. Click to draw a card!";
   document.body.appendChild(gameInfo);
 }
 
 
+// initGame()
 initGame()
