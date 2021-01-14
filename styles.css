@@ -2,6 +2,11 @@ body {
   background-color: pink;
   text-align: center;
 }
+
+.mainDiv {
+  background-color: #35654d;
+  height: 250px;
+}
 .card {
   margin: 10px;
   padding: 10px;

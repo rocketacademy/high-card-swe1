@@ -99,7 +99,7 @@ const output = (message) => {
 
 const createCard = (cardInfo) => {
   const suit = document.createElement('div');
-  suit.classList.add('suit', cardInfo.color);
+  suit.classList.add('suit', cardInfo.color);    
   suit.innerText = cardInfo.suitSymbol;
 
   const name = document.createElement('div');
@@ -117,41 +117,55 @@ const createCard = (cardInfo) => {
 
 const deck = shuffleCards(makeDeck());
 
-const cardInfo = {
-  suitSymbol: '♦️',
-  suit: 'diamond',
-  name: 'queen',
-  display: 'Q',
-  color: 'red',
-  rank: 12,
-}
-
-const player1Click = () => {
+const player1Click = (num) => {
   if (playersTurn === 1 && canClick === true) {
     canClick = false;
-
-    setTimeout(() => {
+    cardContainer1.innerHTML = ''
+    cardContainer2.innerHTML = ''
+    for (let i = 0; i < num; i += 1){
       player1Card = deck.pop();
-      cardContainer.innerHTML = ''
-      cardContainer.appendChild(createCard(player1Card));
-      playersTurn = 2;
-      canClick = true
-    }, 500);
+      player1CardElement = createCard(player1Card)
+      player1CardElement.classList.add('player1')
+      cardContainer1.appendChild(player1CardElement);
+      if (player1Card.rank > maxRank1) {
+        maxRank1 = player1Card.rank
+      } 
+      if (player1Card.rank < minRank1) {
+        minRank1 = player1Card.rank
+    }
+    playersTurn = 2;
+    canClick = true
   }
+    console.log(`minimum rank is ${minRank1}`)
+    console.log(`max rank is ${maxRank1}`)
   setTimeout(() => {
     output("It's player 2's turn. Click to draw a card")
   }, 1000);
 };
-
-const player2Click = () => {
+}
+const player2Click = (num) => {
   if (playersTurn === 2) {
-    const player2Card = deck.pop();
-    cardContainer.appendChild(createCard(player2Card));
+    let player2Card = null;
+    cardContainer2.innerHTML = ''
+    let maxRank2 = 0
+    let minRank2 = 15
+    for (let i = 0; i < num; i += 1){
+      player2Card = deck.pop();
+      cardContainer2.appendChild(createCard(player2Card));
+      if (player2Card.rank > maxRank2) {
+        maxRank2 = player2Card.rank
+      }
+      if (player2Card.rank < minRank2) {
+        minRank2 = player2Card.rank
+      }
+    }  
     playersTurn = 1;
+    console.log(`minimum rank2 is ${minRank2}`)
+    console.log(`max rank2 is ${maxRank2}`)
 
-    if (player1Card.rank > player2Card.rank) {
+    if ((maxRank1 - minRank1) > (maxRank2 - minRank2) ) {
       output('player 1 wins');
-    } else if (player1Card.rank < player2Card.rank) {
+    } else if ((maxRank1 - minRank1) < (maxRank2 - minRank2) ) {
       output('player 2 wins');
     } else {
       output('tie');
@@ -160,16 +174,24 @@ const player2Click = () => {
   setTimeout(() => {
     output("It's player 1's turn. Click to draw a card!")
   }, 1500)
+  // reset max and min values
+  maxRank1 = 0;
+  minRank1 = 13;
 };
 
 
 let player1Card
 let playersTurn = 1; // matches with starting instructions
-let cardContainer;
+let cardContainer1;
+let cardContainer2;
 let canClick = true
+let numCards = 3
+let maxRank1 = 0;
+let minRank1 = 13;
 
 //creating permanent elements
 const mainDiv = document.createElement('div')
+mainDiv.classList.add('mainDiv')
 const player1Button = document.createElement('button');
 const player2Button = document.createElement('button');
 const gameInfo = document.createElement('div');
@@ -177,9 +199,15 @@ const gameInfo = document.createElement('div');
 
 const initGame = () => {
   document.body.appendChild(mainDiv)
-  cardContainer = document.createElement('div');
-  mainDiv.appendChild(cardContainer)
-  cardContainer.classList.add('card-container');
+  // card container for first player
+  cardContainer1 = document.createElement('div');
+  mainDiv.appendChild(cardContainer1)
+  cardContainer1.classList.add('card-container1');
+
+  //card container for second player
+  cardContainer2 = document.createElement('div');
+  mainDiv.appendChild(cardContainer2)
+  cardContainer2.classList.add('card-container2');
 
   // initialize button functionality
   player1Button.innerText = 'Player 1 Draw';
@@ -188,14 +216,12 @@ const initGame = () => {
   player2Button.innerText = 'Player 2 Draw';
   document.body.appendChild(player2Button);
 
-  player1Button.addEventListener('click', () => {player1Click()});
-  player2Button.addEventListener('click', () => {player2Click()});
+  player1Button.addEventListener('click', () => {player1Click(numCards)});
+  player2Button.addEventListener('click', () => {player2Click(numCards)});
 
   // fill game info div with starting instructions
   gameInfo.innerText = "It's player 1's turn. Click to draw a card!";
   document.body.appendChild(gameInfo);
 }
 
-
-// initGame()
 initGame()
