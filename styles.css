@@ -1,3 +1,153 @@
+@import url('https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Roboto+Mono:wght@200;400;600&display=swap');
+
 body {
-  background-color: pink;
+  font-family: 'Roboto Mono', monospace;
+  line-height: 1;
+  max-width: 720px !important;
+  margin: 0 auto !important;
+}
+
+h1,
+button,
+.card {
+  font-family: 'Dela Gothic One', cursive; 
+  font-size: 32px;
+}
+
+h1 {
+  font-size: 32px;
+}
+
+h1.results {
+  margin-bottom: 32px;
+}
+
+.header {
+  text-align: center;
+  width: 100%;
+  padding: 4px 0 4px 0;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.instructions-text {
+  text-align: center;
+}
+
+.instructions-container {
+  margin-bottom: 24px;
+}
+
+.table-container {
+  background-color: #037614;
+  max-width: 720px;
+  width: 80vw;
+  height: 48vh;
+  /* to arrange the cards side by side */
+  position: relative; 
+  /* display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center; */ 
+}
+
+.player-card {
+  width: 160px;
+  height: 240px;
+  background-color: #fff; 
+  position: relative;
+}
+
+.player-one-card {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 15%;
+}
+
+.player-two-card {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 15%;
+}
+
+.score-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around; 
+}
+
+.player-score {
+  text-align: center;
+}
+
+.card {
+  font-size: 48px;
+  padding: 16px;
+}
+
+.card-name {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.card-suit {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+
+.player-actions-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  margin: 24px 0 24px 0;
+}
+
+.player-action {
+  width: 320px;
+  text-align: center;
+}
+
+button {
+  padding: 12px 24px;
+  background-color: #fff;
+  border: 2px solid #000;
+  transition: all 0.5s ease;
+  outline: none;
+}
+
+button:disabled {
+  background-color: rgba(204, 204, 204, 0.2);
+  color: #ccc;
+  border: none;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+button:hover {
+  background-color: #E34D27;
+  border: 2px solid #E34D27;
+}
+
+
+
+/* when page is loaded, results container is not displayed at first */
+.results-container {
+  width: 100%;
+  text-align: center;
+  display: none;
+}
+
+.results-container h1 {
+  font-size: 52px;
 }
