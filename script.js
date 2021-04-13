@@ -24,7 +24,7 @@ const makeDeck = () => {
   // Initialise an empty deck array
   const newDeck = [];
   // Initialise an array of the 4 suits in our deck. We will loop over this array.
-  const suits = ['❤︎', '◆', '♣', '♠'];
+  const suits = ["❤︎", "◆", "♣", "♠"];
 
   // Loop over the suits array
   for (let suitIndex = 0; suitIndex < suits.length; suitIndex += 1) {
@@ -39,14 +39,14 @@ const makeDeck = () => {
       let cardName = `${rankCounter}`;
 
       // If rank is 1, 11, 12, or 13, set cardName to the ace or face card's name
-      if (cardName === '1') {
-        cardName = 'A';
-      } else if (cardName === '11') {
-        cardName = 'J';
-      } else if (cardName === '12') {
-        cardName = 'Q';
-      } else if (cardName === '13') {
-        cardName = 'K';
+      if (cardName === "1") {
+        cardName = "A";
+      } else if (cardName === "11") {
+        cardName = "J";
+      } else if (cardName === "12") {
+        cardName = "Q";
+      } else if (cardName === "13") {
+        cardName = "K";
       }
 
       // Create a new card with the current name, suit, and rank
@@ -69,147 +69,163 @@ const output = (message) => {
   resultsText.innerText = message;
 };
 
-
+const instructions = (message) => {
+  gameInstructions.innerHTML = message;
+};
 
 // ===== Global Setup =======
 const deck = shuffleCards(makeDeck());
 
 let playersTurn = 1; // matches with starting instructions
-let playerOneCard; 
+let playerOneCard;
 let playerOneScore = 0;
 let playerTwoScore = 0;
 
-// buttons for drawing cards
-const playerOneDraw = document.querySelector('.player-one-draw');
-const playerTwoDraw = document.querySelector('.player-two-draw');
+// this variable stores the number of cards that will be drawn by each player
+let numCard = 0;
 
-const gameInstructions = document.querySelector('.instructions-text');
-const resultsContainer = document.querySelector('.results-container');
-const resultsText = document.querySelector('.results-text');
-const playerActionsContainer = document.querySelector('.player-actions-container');
+// empty arrays will store the rank of the cards to find the difference later
+const playerOneCardArray = [];
+const playerTwoCardArray = [];
+
+// buttons for drawing cards
+const playerOneDraw = document.querySelector(".player-one-draw");
+const playerTwoDraw = document.querySelector(".player-two-draw");
+
+const gameInstructions = document.querySelector(".instructions-text");
+const resultsContainer = document.querySelector(".results-container");
+const resultsText = document.querySelector(".results-text");
+const playerActionsContainer = document.querySelector(
+  ".player-actions-container"
+);
 
 // Player One's Card Results
-const playerOneCardReveal = document.querySelector('.player-one-card');
-const playerOneCardName = document.querySelector('.player-one-card .card-name');
-const playerOneCardSuit = document.querySelector('.player-one-card .card-suit');
-const playerOneScoreTag = document.querySelector('.player-one-score')
+const playerOneCardReveal = document.querySelector(".player-one-card");
+const playerOneCardName = document.querySelector(".player-one-card .card-name");
+const playerOneCardSuit = document.querySelector(".player-one-card .card-suit");
+const playerOneScoreTag = document.querySelector(".player-one-score");
 
 // Player Two's Card Results
-const playerTwoCardReveal = document.querySelector('.player-two-card');
-const playerTwoCardName = document.querySelector('.player-two-card .card-name');
-const playerTwoCardSuit = document.querySelector('.player-two-card .card-suit');
-const playerTwoScoreTag = document.querySelector('.player-two-score')
+const playerTwoCardReveal = document.querySelector(".player-two-card");
+const playerTwoCardName = document.querySelector(".player-two-card .card-name");
+const playerTwoCardSuit = document.querySelector(".player-two-card .card-suit");
+const playerTwoScoreTag = document.querySelector(".player-two-score");
 
 // Replay or End Game
-const replayTag = document.querySelector('.replay-btn');
-const endGameTag = document.querySelector('.end-game-btn');
-
+const replayTag = document.querySelector(".replay-btn");
+const endGameTag = document.querySelector(".end-game-btn");
 
 // ======== Start of game ===========
 const initGame = () => {
-  playerOneCardReveal.style.display = 'none';
-  playerTwoCardReveal.style.display = 'none';
-  resultsContainer.style.display = 'none';
-  
+  playerOneCardReveal.style.display = "none";
+  playerTwoCardReveal.style.display = "none";
+  resultsContainer.style.display = "none";
+
   playerOneDraw.disabled = false;
-  playerTwoDraw.disabled = true; 
+  playerTwoDraw.disabled = true;
 
-  gameInstructions.innerHTML = 'Player 1 goes first';
+  instructions("Player 1 goes first");
 
-  playerOneDraw.addEventListener('click', playerOneClicks); 
-  playerTwoDraw.addEventListener('click', playerTwoClicks);
-
-}
+  playerOneDraw.addEventListener("click", playerOneClicks);
+  playerTwoDraw.addEventListener("click", playerTwoClicks);
+};
 
 // player 1 clicks on the Draw button
 const playerOneClicks = () => {
   playerOneCard = deck.pop();
 
   // print card
-  playerOneCardReveal.style.display = 'block';
-  playerOneCardName.innerHTML = `${playerOneCard.name}`;
-  playerOneCardSuit.innerHTML = `${playerOneCard.suit}`;
-  
+  playerOneCardReveal.style.display = "block";
+  playerOneCardName.innerHTML = playerOneCard.name;
+  playerOneCardSuit.innerHTML = playerOneCard.suit;
+
+  // add card rank into the array
+  playerOneCardArray.push(playerOneCard.rank);
+
   // switch the disabled draw buttons
   playerOneDraw.disabled = true;
   playerTwoDraw.disabled = false;
-  gameInstructions.innerHTML = 'Player 2 goes next';
-}
+  instructions("Player 2 goes next");
+};
 
 // player 2 clicks on the Draw button
-// if playersTurn == 1 : 
+// if playersTurn == 1 :
 const playerTwoClicks = () => {
   playerTwoCard = deck.pop();
-  
+  numCard += 1;
+
   // print card
-  playerTwoCardReveal.style.display = 'block';
-  playerTwoCardName.innerHTML = `${playerTwoCard.name}`;
-  playerTwoCardSuit.innerHTML = `${playerOneCard.suit}`;
-  
-  // remove the draw actions and replace with the results
-  playerTwoDraw.disabled = true;
-  resultsContainer.style.display = 'block';
-  gameInstructions.innerHTML = `What's next?`;
+  playerTwoCardReveal.style.display = "block";
+  playerTwoCardName.innerHTML = playerTwoCard.name;
+  playerTwoCardSuit.innerHTML = playerTwoCard.suit;
 
-  // reveal results 
-  if (playerOneCard.rank > playerTwoCard.rank) {
-    output('Player 1 wins');
-    playerOneScore += 1; 
+  // add the rank into the array to compare diff
+  playerTwoCardArray.push(playerTwoCard.rank);
 
-  } else if (playerOneCard.rank < playerTwoCard.rank) {
-    output('Player 2 wins');
-    playerTwoScore += 1;
+  // if player 2 has only drawn one card, player 1 should go next
+  if ((numCard = 1)) {
+    instructions("Player 1 goes next");
+    // if the number of cards that have been drawn is the set amount, end game
 
-  } else {
-    output(`It's a tie`);
+    // player one goes next
+    playerTwoDraw.disabled = true;
+    playerOneDraw.disabled = false;
+  } else if ((numCard = 2)) {
+    instructions(`What's next?`);
+
+    // find the winner here
+    const playerOneDiff = findDifference(playerOneCardArray);
+    const playerTwoDiff = findDifference(playerTwoCardArray);
+
+    // reveal results
+    if (playerOneDiff > playerTwoDiff) {
+      output("Player 1 wins");
+      playerOneScore += 1;
+    } else if (playerOneDiff < playerTwoDiff) {
+      output("Player 2 wins");
+      playerTwoScore += 1;
+    } else {
+      output(`It's a tie`);
+    }
+
+    // remove the draw actions & show results
+    playerTwoDraw.disabled = true;
+    resultsContainer.style.display = "block";
   }
 
-  playerOneScoreTag.innerHTML = `${playerOneScore}`;
-  playerTwoScoreTag.innerHTML = `${playerTwoScore}`;
-}
+  playerOneScoreTag.innerHTML = playerOneScore;
+  playerTwoScoreTag.innerHTML = playerTwoScore;
+};
 
-// Actual game 
+// what is the absolute difference of the card rank
+const findDifference = (arr) => {
+  return Math.abs(arr[0] - arr[1]);
+};
+
+// Actual game
 initGame();
 
 // Replay Game
-replayTag.addEventListener('click',() => {
+replayTag.addEventListener("click", () => {
+  // reset the player card ranks array to empty array when the game is replayed so we can calculate the new difference
+  playerOneCardArray = [];
+  playerTwoCardArray = [];
+  numCard = 0;
+
   initGame();
-})
+});
 
 // End Game
-endGameTag.addEventListener('click', () => {
+endGameTag.addEventListener("click", () => {
   // remove game
-  playerActionsContainer.style.display = 'none'; 
+  playerActionsContainer.style.display = "none";
 
-  // winning logic 
+  // winning logic
   if (playerOneScore > playerTwoScore) {
-    output('Player 1 beats Player 2');
+    output("Player 1 beats Player 2");
+  } else if (playerOneScore < playerTwoScore) {
+    output("Player 2 beats Player 1");
+  } else {
+    output("Player 1 & 2 draw");
   }
-
-  else if (playerOneScore < playerTwoScore) {
-    output('Player 2 beats Player 1');
-  }
-
-  else {
-    output('Player 1 and Player 2 draw');
-  }
-})
-
-
-// Game Initialization
-// const initGame = () => {
-//   // initialize button functionality
-//   playerOneDraw.innerText = 'Player 1 Draw';
-//   document.body.appendChild(playerOneDraw);
-
-//   playerTwoDraw.innerText = 'Player 2 Draw';
-//   document.body.appendChild(playerTwoDraw);
-
-//   playerOneDraw.addEventListener('click', player1Click);
-//   playerTwoDraw.addEventListener('click', player2Click);
-
-//   // fill game info div with starting instructions
-//   gameInstructions.innerText = 'Its player 1 turn. Click to draw a card!';
-//   document.body.appendChild(gameInstructions);
-// };
-
+});
