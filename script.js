@@ -1,4 +1,4 @@
-const deck = shuffleCards(makeDeck());
+
 
 let playersTurn = 1; // matches with starting instructions
 let player1Card;
@@ -14,6 +14,8 @@ const getRandomIndex = (max) => Math.floor(Math.random() * max);
 
 // Shuffle an array of cards
 let cardContainer;
+
+
 const shuffleCards = (cards) => {
   // Loop over the card deck array once
   for (let currentIndex = 0; currentIndex < cards.length; currentIndex += 1) {
@@ -35,7 +37,7 @@ const makeDeck = () => {
   // Initialise an empty deck array
   const newDeck = [];
   // Initialise an array of the 4 suits in our deck. We will loop over this array.
-  const suits = ['hearts', 'diamonds', 'clubs', 'spades'];
+  const suits = ['♥️', '♦️', '♣', '♠'];
 
   // Loop over the suits array
   for (let suitIndex = 0; suitIndex < suits.length; suitIndex += 1) {
@@ -78,11 +80,11 @@ const makeDeck = () => {
 const createCard = (cardInfo) => {
   const suit = document.createElement('div');
   suit.classList.add('suit');
-  suit.innerText = cardInfo.suitSymbol;
+  suit.innerText = cardInfo.suit;
 
   const name = document.createElement('div');
   name.classList.add(cardInfo.display, cardInfo.color);
-  name.innerText = '3';
+  name.innerText = cardInfo.name;
 
   const card = document.createElement('div');
   card.classList.add('card');
@@ -92,7 +94,7 @@ const createCard = (cardInfo) => {
 
   return card;
 };
-
+const deck = shuffleCards(makeDeck());
 const player1Click = () => {
   if (playersTurn === 1) {
     player1Card = deck.pop();
@@ -102,7 +104,7 @@ const player1Click = () => {
     // in case this is not the 1st time
     // in the entire app,
     // empty the card container
-    cardContainer.innerHTML = '';
+    gameInfo.innerHTML = '';
 
     cardContainer.appendChild(cardElement);
 
@@ -110,26 +112,28 @@ const player1Click = () => {
   }
 };
 
+const cardOutput = (message) => {
+  gameInfo.innerText = message;
+};
+
 const player2Click = () => {
   if (playersTurn === 2) {
     const player2Card = deck.pop();
+    const cardElement = createCard(player2Card);
     cardContainer.appendChild(cardElement);
 
     playersTurn = 1;
 
     if (player1Card.rank > player2Card.rank) {
-      output('player 1 wins');
+      cardOutput('player 1 wins');
     } else if (player1Card.rank < player2Card.rank) {
-      output('player 2 wins');
+      cardOutput('player 2 wins');
     } else {
-      output('tie');
+      cardOutput('tie');
     }
   }
 };
 
-const cardOutput = (message) => {
-  gameInfo.innerText = message;
-};
 const initGame = () => {
   // initialize button functionality
   cardContainer = document.createElement('div');
@@ -149,3 +153,4 @@ const initGame = () => {
   cardContainer.appendChild(gameInfo);
 
 };
+initGame();
