@@ -223,8 +223,8 @@ initGame();
 // Replay Game
 replayTag.addEventListener("click", () => {
   // reset the player card ranks array to empty array when the game is replayed so we can calculate the new difference
-  playerOneCardArray = playerOneCardArray.splice(0, playerOneCardArray.length);
-  playerTwoCardArray = playerTwoCardArray.splice(0, playerTwoCardArray.length);
+  playerOneCardArray.splice(0, playerOneCardArray.length);
+  playerTwoCardArray.splice(0, playerTwoCardArray.length);
   numCard = 0;
 
   initGame();
