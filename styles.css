@@ -64,14 +64,14 @@ h1.results {
   border: 2px solid #000;
 }
 
-.player-one-first-card {
+.player-one-card {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   left: 15%;
 }
 
-.player-two-first-card {
+.player-two-card {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);

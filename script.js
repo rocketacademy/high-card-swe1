@@ -1,4 +1,3 @@
-// ===== Helper functions ========
 // Get a random index ranging from 0 (inclusive) to max (exclusive).
 const getRandomIndex = (max) => Math.floor(Math.random() * max);
 
@@ -73,7 +72,10 @@ const instructions = (message) => {
   gameInstructions.innerHTML = message;
 };
 
-// ===== Global Setup =======
+// add a delay when the user clicks the deal button
+// global boolean variable canClick that represents whether the user has recently clicked and we are waiting for the delay to end.
+let canClick = true;
+
 const deck = shuffleCards(makeDeck());
 
 let playersTurn = 1; // matches with starting instructions
@@ -132,69 +134,82 @@ const initGame = () => {
 
 // player 1 clicks on the Draw button
 const playerOneClicks = () => {
-  playerOneCard = deck.pop();
+  if (canClick === true) {
+    canClick = false;
 
-  // print card
-  playerOneCardReveal.style.display = "block";
-  playerOneCardName.innerHTML = playerOneCard.name;
-  playerOneCardSuit.innerHTML = playerOneCard.suit;
+    setTimeout(() => {
+      playerOneCard = deck.pop();
 
-  // add card rank into the array
-  playerOneCardArray.push(playerOneCard.rank);
+      // print card
+      playerOneCardReveal.style.display = "block";
+      playerOneCardName.innerHTML = playerOneCard.name;
+      playerOneCardSuit.innerHTML = playerOneCard.suit;
 
-  // switch the disabled draw buttons
-  playerOneDraw.disabled = true;
-  playerTwoDraw.disabled = false;
-  instructions("Player 2 goes next");
+      // add card rank into the array
+      playerOneCardArray.push(playerOneCard.rank);
+
+      // switch the disabled draw buttons
+      playerOneDraw.disabled = true;
+      playerTwoDraw.disabled = false;
+      instructions("Player 2 goes next");
+      canClick = true;
+    }, 500);
+  }
 };
 
 // player 2 clicks on the Draw button
 // if playersTurn == 1 :
 const playerTwoClicks = () => {
-  playerTwoCard = deck.pop();
-  numCard += 1;
+  if (canClick === true) {
+    canClick = false;
 
-  // print card
-  playerTwoCardReveal.style.display = "block";
-  playerTwoCardName.innerHTML = playerTwoCard.name;
-  playerTwoCardSuit.innerHTML = playerTwoCard.suit;
+    setTimeout(() => {
+      playerTwoCard = deck.pop();
+      numCard += 1;
 
-  // add the rank into the array to compare diff
-  playerTwoCardArray.push(playerTwoCard.rank);
+      // print card
+      playerTwoCardReveal.style.display = "block";
+      playerTwoCardName.innerHTML = playerTwoCard.name;
+      playerTwoCardSuit.innerHTML = playerTwoCard.suit;
 
-  // if player 2 has only drawn one card, player 1 should go next
-  if ((numCard = 1)) {
-    instructions("Player 1 goes next");
-    // if the number of cards that have been drawn is the set amount, end game
+      // add the rank into the array to compare diff
+      playerTwoCardArray.push(playerTwoCard.rank);
 
-    // player one goes next
-    playerTwoDraw.disabled = true;
-    playerOneDraw.disabled = false;
-  } else if ((numCard = 2)) {
-    instructions(`What's next?`);
+      // if player 2 has only drawn one card, player 1 should go next
+      if (numCard === 1) {
+        instructions("Player 1 goes next");
+        // if the number of cards that have been drawn is the set amount, end game
 
-    // find the winner here
-    const playerOneDiff = findDifference(playerOneCardArray);
-    const playerTwoDiff = findDifference(playerTwoCardArray);
+        // player one goes next
+        playerTwoDraw.disabled = true;
+        playerOneDraw.disabled = false;
+      } else if (numCard === 2) {
+        instructions(`What's next?`);
 
-    // reveal results
-    if (playerOneDiff > playerTwoDiff) {
-      output("Player 1 wins");
-      playerOneScore += 1;
-    } else if (playerOneDiff < playerTwoDiff) {
-      output("Player 2 wins");
-      playerTwoScore += 1;
-    } else {
-      output(`It's a tie`);
-    }
+        // find the winner here
+        const playerOneDiff = findDifference(playerOneCardArray);
+        const playerTwoDiff = findDifference(playerTwoCardArray);
 
-    // remove the draw actions & show results
-    playerTwoDraw.disabled = true;
-    resultsContainer.style.display = "block";
+        // reveal results
+        if (playerOneDiff > playerTwoDiff) {
+          output("Player 1 wins");
+          playerOneScore += 1;
+        } else if (playerOneDiff < playerTwoDiff) {
+          output("Player 2 wins");
+          playerTwoScore += 1;
+        } else {
+          output(`It's a tie`);
+        }
+
+        // remove the draw actions & show results
+        playerTwoDraw.disabled = true;
+        resultsContainer.style.display = "block";
+      }
+      canClick = true;
+      playerOneScoreTag.innerHTML = playerOneScore;
+      playerTwoScoreTag.innerHTML = playerTwoScore;
+    }, 500);
   }
-
-  playerOneScoreTag.innerHTML = playerOneScore;
-  playerTwoScoreTag.innerHTML = playerTwoScore;
 };
 
 // what is the absolute difference of the card rank
@@ -208,8 +223,8 @@ initGame();
 // Replay Game
 replayTag.addEventListener("click", () => {
   // reset the player card ranks array to empty array when the game is replayed so we can calculate the new difference
-  playerOneCardArray = [];
-  playerTwoCardArray = [];
+  playerOneCardArray = playerOneCardArray.splice(0, playerOneCardArray.length);
+  playerTwoCardArray = playerTwoCardArray.splice(0, playerTwoCardArray.length);
   numCard = 0;
 
   initGame();
@@ -229,3 +244,10 @@ endGameTag.addEventListener("click", () => {
     output("Player 1 & 2 draw");
   }
 });
+
+// Every time I call a card, I want to show it on the screen (right now it’s replacing the same player-card-div)
+
+// I can save each new card object in an array so I have my hand
+
+//  create new div to store card
+//  add angle to the card
