@@ -76,6 +76,32 @@ const instructions = (message) => {
 // global boolean variable canClick that represents whether the user has recently clicked and we are waiting for the delay to end.
 let canClick = true;
 
+const playerOneHandTag = document.querySelector(".player-one-hand");
+const playerTwoHandTag = document.querySelector(".player-two-hand");
+
+// function that creates the card inside the table container
+// we call this function when the button is clicked / drawing cards
+const createCard = (cardObject, container) => {
+  const cardDiv = document.createElement("div");
+  cardDiv.classList.add("player-card");
+
+  // card name
+  const cardName = document.createElement("div");
+  cardName.classList.add("card-name");
+  cardName.innerHTML = cardObject.name;
+  cardDiv.appendChild(cardName);
+
+  // card suit
+  const cardSuit = document.createElement("div");
+  cardSuit.classList.add("card-suit");
+  cardSuit.innerHTML = cardObject.suit;
+  cardDiv.appendChild(cardSuit);
+
+  // displays inside the player hand's side
+  container.appendChild(cardDiv);
+  console.log(cardObject);
+};
+
 const deck = shuffleCards(makeDeck());
 
 let playersTurn = 1; // matches with starting instructions
@@ -90,6 +116,10 @@ let numCard = 0;
 const playerOneCardArray = [];
 const playerTwoCardArray = [];
 
+// store card objects inside an array
+const playerOneHandObjArray = [];
+const playerTwoHandObjArray = [];
+
 // buttons for drawing cards
 const playerOneDraw = document.querySelector(".player-one-draw");
 const playerTwoDraw = document.querySelector(".player-two-draw");
@@ -101,16 +131,8 @@ const playerActionsContainer = document.querySelector(
   ".player-actions-container"
 );
 
-// Player One's Card Results
-const playerOneCardReveal = document.querySelector(".player-one-card");
-const playerOneCardName = document.querySelector(".player-one-card .card-name");
-const playerOneCardSuit = document.querySelector(".player-one-card .card-suit");
+// player scores
 const playerOneScoreTag = document.querySelector(".player-one-score");
-
-// Player Two's Card Results
-const playerTwoCardReveal = document.querySelector(".player-two-card");
-const playerTwoCardName = document.querySelector(".player-two-card .card-name");
-const playerTwoCardSuit = document.querySelector(".player-two-card .card-suit");
 const playerTwoScoreTag = document.querySelector(".player-two-score");
 
 // Replay or End Game
@@ -119,8 +141,6 @@ const endGameTag = document.querySelector(".end-game-btn");
 
 // ======== Start of game ===========
 const initGame = () => {
-  playerOneCardReveal.style.display = "none";
-  playerTwoCardReveal.style.display = "none";
   resultsContainer.style.display = "none";
 
   playerOneDraw.disabled = false;
@@ -141,11 +161,12 @@ const playerOneClicks = () => {
       playerOneCard = deck.pop();
 
       // print card
-      playerOneCardReveal.style.display = "block";
-      playerOneCardName.innerHTML = playerOneCard.name;
-      playerOneCardSuit.innerHTML = playerOneCard.suit;
+      createCard(playerOneCard, playerOneHandTag);
 
       // add card rank into the array
+      playerOneHandObjArray.push(playerOneCard);
+
+      // to find difference
       playerOneCardArray.push(playerOneCard.rank);
 
       // switch the disabled draw buttons
@@ -168,9 +189,10 @@ const playerTwoClicks = () => {
       numCard += 1;
 
       // print card
-      playerTwoCardReveal.style.display = "block";
-      playerTwoCardName.innerHTML = playerTwoCard.name;
-      playerTwoCardSuit.innerHTML = playerTwoCard.suit;
+      createCard(playerTwoCard, playerTwoHandTag);
+
+      // add card rank into the array
+      playerOneHandObjArray.push(playerOneCard);
 
       // add the rank into the array to compare diff
       playerTwoCardArray.push(playerTwoCard.rank);
@@ -194,9 +216,11 @@ const playerTwoClicks = () => {
         if (playerOneDiff > playerTwoDiff) {
           output("Player 1 wins");
           playerOneScore += 1;
+          console.log(playerOneScore);
         } else if (playerOneDiff < playerTwoDiff) {
           output("Player 2 wins");
           playerTwoScore += 1;
+          console.log(playerTwoScore);
         } else {
           output(`It's a tie`);
         }

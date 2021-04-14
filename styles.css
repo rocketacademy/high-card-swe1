@@ -64,7 +64,7 @@ h1.results {
   border: 2px solid #000;
 }
 
-.player-one-card {
+/* .player-one-card {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -76,7 +76,7 @@ h1.results {
   top: 50%;
   transform: translateY(-50%);
   right: 15%;
-}
+}*/
 
 .score-container {
   width: 100%;
@@ -149,4 +149,20 @@ button:hover {
 
 .results-container h1 {
   font-size: 52px;
+}
+
+.player-two-hand {
+  min-width: 50%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.player-one-hand {
+  min-width: 50%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
