@@ -140,8 +140,12 @@ const initGame = () => {
   player2Button.innerText = "Player 2 Draw";
   cardContainer.appendChild(player2Button);
 
-  player1Button.addEventListener("click", player1Click);
-  player2Button.addEventListener("click", player2Click);
+  player1Button.addEventListener("click", () => {
+    setTimeout(player1Click, 1000);
+  });
+  player2Button.addEventListener("click", () => {
+    setTimeout(player2Click, 1000);
+  });
   cardContainer.appendChild(obtainResultsButton);
   obtainResultsButton.addEventListener("click", evaluateGameResult);
 
