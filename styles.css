@@ -1,3 +1,52 @@
 body {
   background-color: pink;
+  text-align: center;
+}
+.card {
+  margin: 20px;
+  padding: 10px;
+  background-color: white;
+  border: solid 2px;
+  border-color: black;
+  width: 50px;
+  height: 80px;
+  text-align: center;
+  border-radius: 8px;
+  display: inline-block;
+}
+
+.suit {
+  margin: 5px;
+  font-size: 20px;
+}
+
+.name {
+  margin: 5px;
+  font-size: 24px;
+  font-weight: bold;
+  font-family: sans-serif;
+}
+
+.red {
+  color: red;
+}
+.black {
+  color: black;
+}
+
+.card-container {
+  margin: auto;
+  background: grey;
+  border-radius: 4px;
+  text-align: center;
+  width: 300px;
+  height: 150px;
+}
+
+.button {
+  margin-left: 10px;
+}
+.output {
+  text-align: center;
+  margin: 8px;
 }
