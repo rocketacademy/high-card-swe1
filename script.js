@@ -31,7 +31,6 @@ const makeDeck = () => {
     // Store the current suit in a variable
     const currentSuit = suits[suitIndex];
     const currentSuitSymbol = suitSymbols[suitIndex];
-
     // Loop from 1 to 13 to create all cards for a given suit
     // Notice rankCounter starts at 1 and not 0, and ends at 13 and not 12.
     // This is an example of a loop without an array.
@@ -46,7 +45,6 @@ const makeDeck = () => {
       else {
         colour = 'black';
       }
-
       // If rank is 1, 11, 12, or 13, set cardName to the ace or face card's name
       if (cardName === '1') {
         cardName = 'ace';
@@ -88,7 +86,10 @@ let playersTurn = 1;
 
 // Use let for player1Card object because player1Card will be reassigned
 let player1Card;
-let cardContainer;
+let player2Card;
+
+let player1HandRank = [];
+let player2HandRank = [];
 
 const createCard = (cardInfo) => {
   const suit = document.createElement('div');
@@ -107,17 +108,17 @@ const createCard = (cardInfo) => {
 
   return card;
 };
-
+let cardContainer1;
+let cardContainer2;
 const player1Click = () => {
   if (playersTurn === 1) {
     // Pop player 1's card metadata from the deck
     player1Card = deck.pop();
+    player1HandRank.push(player1Card.rank);
     // Create card element from card metadata
     const cardElement = createCard(player1Card);
-    // Empty cardContainer in case this is not the 1st round of gameplay
-    cardContainer.innerHTML = '';
     // Append the card element to the card container
-    cardContainer.appendChild(cardElement);
+    cardContainer1.appendChild(cardElement);
     // Switch to player 2's turn
     playersTurn = 2;
   }
@@ -135,28 +136,44 @@ const output = (message) => {
 const player2Click = () => {
   if (playersTurn === 2) {
     // Pop player 2's card metadata from the deck
-    const player2Card = deck.pop();
+    player2Card = deck.pop();
+    player2HandRank.push(player2Card.rank);
+
     // Create card element from card metadata
     const cardElement = createCard(player2Card);
     // Append card element to card container
-    cardContainer.appendChild(cardElement);
+    cardContainer2.appendChild(cardElement);
+
     // Switch to player 1's turn
     playersTurn = 1;
-    // Determine and output winner
-    if (player1Card.rank > player2Card.rank) {
-      output('player 1 wins');
-    } else if (player1Card.rank < player2Card.rank) {
-      output('player 2 wins');
-    } else {
-      output('tie');
-    }
   }
 };
 
+const faceOffFunc = () => {
+  player1HandRank.sort((a, b) => b - a);
+  player2HandRank.sort((a, b) => b - a);
+  if ((player1HandRank[0] - player1HandRank[player1HandRank.length - 1])
+  > (player2HandRank[0] - player2HandRank[player2HandRank.length - 1])) {
+    output('player 1 wins');
+  } else if ((player1HandRank[0] - player1HandRank[player1HandRank.length - 1])
+  < (player2HandRank[0] - player2HandRank[player2HandRank.length - 1])) {
+    output('player 2 wins');
+  } else {
+    output('tie');
+  }
+  cardContainer1.innerHTML = '';
+  cardContainer2.innerHTML = '';
+  player1HandRank = [];
+  player2HandRank = [];
+};
+
 const initGame = () => {
-  cardContainer = document.createElement('div');
-  cardContainer.classList.add('card-container');
-  document.body.appendChild(cardContainer);
+  cardContainer1 = document.createElement('div');
+  cardContainer1.classList.add('card-container1');
+  document.body.appendChild(cardContainer1);
+  cardContainer2 = document.createElement('div');
+  cardContainer2.classList.add('card-container2');
+  document.body.appendChild(cardContainer2);
   // initialize button functionality
   const player1Button = document.createElement('button');
   player1Button.innerText = 'Player 1 Draw';
@@ -166,8 +183,13 @@ const initGame = () => {
   player2Button.innerText = 'Player 2 Draw';
   document.body.appendChild(player2Button);
 
+  const faceOffButton = document.createElement('button');
+  faceOffButton.innerText = 'Faceoff!';
+  document.body.appendChild(faceOffButton);
+
   player1Button.addEventListener('click', player1Click);
   player2Button.addEventListener('click', player2Click);
+  faceOffButton.addEventListener('click', faceOffFunc);
 
   // fill game info div with starting instructions
   gameInfo.innerText = 'Its player 1 turn. Click to draw a card!';
