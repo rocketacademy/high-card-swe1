@@ -84,6 +84,9 @@ let playersTurn = 1;
 // Use let for player1Card object because player1Card will be reassigned
 let player1Card;
 
+// create a shuffled deck
+
+const deck = shuffleCards(makeDeck());
 // create two buttons
 const player1Button = document.createElement('button');
 player1Button.className = 'button';
@@ -95,6 +98,7 @@ player2Button.className = 'button2';
 player2Button.innerText = 'Player 2 Draw';
 document.body.appendChild(player2Button);
 
+// create card container
 let cardContainer;
 cardContainer = document.createElement('div');
 cardContainer.classList.add('card-container');
@@ -104,8 +108,6 @@ const gameInfo = document.createElement('div');
 const output = (message) => {
   gameInfo.innerText = message;
 };
-
-const deck = shuffleCards(makeDeck());
 
 const createCard = (cardInfo) => {
   const suit = document.createElement('div');
@@ -138,7 +140,7 @@ const player1Click = () => {
     cardContainer.innerHTML = '';
     // Append the card element to the card container
     cardContainer.appendChild(cardElement);
-
+    output('Player 2\'s turn!');
     // Switch to player 2's turn
     playersTurn = 2;
   }
@@ -159,9 +161,9 @@ const player2Click = () => {
 
     // Determine and output winner
     if (player1Card.rank > player2Card.rank) {
-      output('player 1 wins');
+      output('Player 1 wins. Player 1\'s turn now!');
     } else if (player1Card.rank < player2Card.rank) {
-      output('player 2 wins');
+      output('Player 2 wins. Player 1\'s turn now!');
     } else {
       output('tie');
     }
