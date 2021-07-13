@@ -8,7 +8,8 @@ const suits = ['hearts', 'diamonds', 'clubs', 'spades'];
 const symbols = ['♥', '♦', '♣', '♠'];
 
 const gameInfo = document.createElement('div');
-const cardContainer = document.createElement('div');
+const cardContainer1 = document.createElement('div');
+const cardContainer2 = document.createElement('div');
 const drawCount = document.createElement('input');
 
 // Get a random index ranging from 0 (inclusive) to max (exclusive).
@@ -79,12 +80,13 @@ const highLow = (playerHand) => {
 
 // DOM output helper
 const output = (message) => {
-  gameInfo.innerText = message;
+  gameInfo.innerHTML = message;
 };
 
 const player1Click = () => {
   if (playersTurn === 1) {
-    cardContainer.innerText = '';
+    cardContainer1.innerText = '';
+    cardContainer2.innerText = '';
     player1Hand = [];
     player2Hand = [];
     scoreDiff = 0;
@@ -95,9 +97,9 @@ const player1Click = () => {
     }
     scoreDiff += highLow(player1Hand);
     const cardElement = printHand(player1Hand);
-    cardContainer.appendChild(cardElement);
+    cardContainer1.appendChild(cardElement);
 
-    output('Player 2\'s turn!');
+    output(`Player 1's score is <strong>${scoreDiff}</strong>, let's see if you can beat that!`);
     playersTurn = 2;
   }
 };
@@ -109,19 +111,20 @@ const player2Click = () => {
       player2Hand.push(card);
     }
     // Append the card element to the card container
-    scoreDiff -= highLow(player2Hand);
+    const score2 = highLow(player2Hand);
+    scoreDiff -= score2;
 
     const cardElement = printHand(player2Hand);
-    cardContainer.appendChild(cardElement);
+    cardContainer2.appendChild(cardElement);
 
     playersTurn = 1;
     drawCount.disabled = false;
     if (scoreDiff > 0) {
-      output('Player 1 wins!');
+      output(`You scored <strong>${score2}</strong>. Player 1 wins by ${scoreDiff}!`);
     } else if (scoreDiff < 0) {
-      output('Player 2 wins!');
+      output(`You scored <strong>${score2}</strong>. You win by ${Math.abs(scoreDiff)}!`);
     } else {
-      output('Tie!');
+      output(`You scored <strong>${score2}</strong>. Tie!`);
     }
   }
 };
@@ -146,8 +149,8 @@ const printCard = (cardInfo) => {
   const card = document.createElement('div');
   card.classList.add('card');
   console.log(cardInfo);
+
   if (cardInfo.highLow) {
-    console.log('here');
     card.classList.add('high-low');
   }
 
@@ -162,6 +165,9 @@ const initGame = () => {
   scoreDiff = 0;
   makeDeck();
 
+  const mainContainer = document.createElement('div');
+  mainContainer.id = 'main-container';
+  document.body.appendChild(mainContainer);
   const player1Button = document.createElement('button');
   player1Button.className = 'button';
   const player2Button = document.createElement('button');
@@ -169,10 +175,12 @@ const initGame = () => {
 
   gameInfo.className = 'output';
 
-  cardContainer.classList.add('card-container');
-  document.body.appendChild(cardContainer);
+  cardContainer1.classList.add('card-container1');
+  mainContainer.appendChild(cardContainer1);
+  cardContainer2.classList.add('card-container2');
+  mainContainer.appendChild(cardContainer2);
 
-  document.body.appendChild(gameInfo);
+  mainContainer.appendChild(gameInfo);
   // initialize button functionality
   const buttonDiv = document.createElement('div');
   player1Button.innerText = 'Player 1 Draw';

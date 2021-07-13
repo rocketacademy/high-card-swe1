@@ -33,15 +33,31 @@ body {
 .black {
   color: black;
 }
-
-.card-container {
+#main-container {
+  display: flex;
+  justify-content: center;
+}
+.card-container1 {
   margin: auto;
-  background: darkgray;
+  order: 1;
+  background: linear-gradient(45deg, gray, darkgray);
   border-radius: 8px;
   border-color: dimgray;
   border-style: solid;
   text-align: center;
-  width: 80%;
+  width: 30%;
+  height: 300px;
+}
+
+.card-container2 {
+  margin: auto;
+  order: 3;
+  background: linear-gradient(45deg, gray, darkgray);
+  border-radius: 8px;
+  border-color: dimgray;
+  border-style: solid;
+  text-align: center;
+  width: 30%;
   height: 300px;
 }
 
@@ -49,6 +65,8 @@ body {
   margin-left: 10px;
 }
 .output {
+  width: 20%;
+  order: 2;
   text-align: center;
   margin: 8px;
 }
