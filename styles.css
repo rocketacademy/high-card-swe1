@@ -41,8 +41,8 @@ body {
   border-color: dimgray;
   border-style: solid;
   text-align: center;
-  width: 300px;
-  height: 150px;
+  width: 80%;
+  height: 300px;
 }
 
 .button {
@@ -51,4 +51,8 @@ body {
 .output {
   text-align: center;
   margin: 8px;
+}
+.high-low {
+  border: solid 3px;
+  border-color: gold;
 }
