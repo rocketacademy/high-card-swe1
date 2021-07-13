@@ -17,8 +17,8 @@ const deck = [];
 const suits = ['hearts', 'diamonds', 'clubs', 'spades'];
 const symbols = ['♥', '♦', '♣', '♠'];
 
-// Get a random index ranging from 0 (exclusive) to max (inclusive).
-const getRandomIndex = (max) => Math.ceil(Math.random() * max);
+// Get a random index ranging from 0 (inclusive) to max (exclusive).
+const getRandomIndex = (max) => Math.floor(Math.random() * max);
 
 const generateCard = (cardRank, suit) => {
   let cardName = '';
@@ -65,7 +65,7 @@ function makeDeck() {
   for (let i = 1; i <= 13; i += 1) {
     for (let j = 0; j < 4; j += 1) {
       // generates cards and inserts randomly into deck
-      deck.splice(getRandomIndex(deck.length), 0, generateCard(i, j));
+      deck.splice(getRandomIndex(deck.length + 1), 0, generateCard(i, j));
     }
   }
 }
@@ -85,7 +85,7 @@ const player1Click = () => {
     cardContainer.innerHTML = '';
     // Append the card element to the card container
     cardContainer.appendChild(cardElement);
-
+    output('Player 2\'s turn!');
     playersTurn = 2;
   }
 };
@@ -100,11 +100,11 @@ const player2Click = () => {
     playersTurn = 1;
 
     if (player1Card.rank > player2Card.rank) {
-      output('player 1 wins');
+      output('Player 1 wins!');
     } else if (player1Card.rank < player2Card.rank) {
-      output('player 2 wins');
+      output('Player 2 wins!');
     } else {
-      output('tie');
+      output('Tie!');
     }
   }
 };
@@ -142,7 +142,7 @@ const initGame = () => {
   player2Button.addEventListener('click', player2Click);
 
   // fill game info div with starting instructions
-  gameInfo.innerText = 'Its player 1 turn. Click to draw a card!';
+  gameInfo.innerText = 'It\'s Player 1\'s turn. Click to draw a card!';
 };
 
 initGame();
