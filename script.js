@@ -167,6 +167,12 @@ const initGame = () => {
 
   const mainContainer = document.createElement('div');
   mainContainer.id = 'main-container';
+  const player1Container = document.createElement('div');
+  const player2Container = document.createElement('div');
+  player1Container.classList.add('player1');
+  player2Container.classList.add('player2');
+  mainContainer.appendChild(player1Container);
+  mainContainer.appendChild(player2Container);
   document.body.appendChild(mainContainer);
   const player1Button = document.createElement('button');
   player1Button.className = 'button';
@@ -175,20 +181,19 @@ const initGame = () => {
 
   gameInfo.className = 'output';
 
-  cardContainer1.classList.add('card-container1');
-  mainContainer.appendChild(cardContainer1);
-  cardContainer2.classList.add('card-container2');
-  mainContainer.appendChild(cardContainer2);
+  cardContainer1.classList.add('card-container');
+  cardContainer2.classList.add('card-container');
+
+  player1Container.appendChild(cardContainer1);
+  player2Container.appendChild(cardContainer2);
 
   mainContainer.appendChild(gameInfo);
   // initialize button functionality
-  const buttonDiv = document.createElement('div');
   player1Button.innerText = 'Player 1 Draw';
-  buttonDiv.appendChild(player1Button);
+  player1Container.appendChild(player1Button);
 
   player2Button.innerText = 'Player 2 Draw';
-  buttonDiv.appendChild(player2Button);
-  document.body.appendChild(buttonDiv);
+  player2Container.appendChild(player2Button);
 
   drawCount.type = 'number';
   drawCount.min = '2';

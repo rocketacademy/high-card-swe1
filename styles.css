@@ -37,35 +37,31 @@ body {
   display: flex;
   justify-content: center;
 }
-.card-container1 {
+.card-container {
   margin: auto;
-  order: 1;
   background: linear-gradient(45deg, gray, darkgray);
   border-radius: 8px;
   border-color: dimgray;
   border-style: solid;
   text-align: center;
-  width: 30%;
   height: 300px;
 }
 
-.card-container2 {
-  margin: auto;
-  order: 3;
-  background: linear-gradient(45deg, gray, darkgray);
-  border-radius: 8px;
-  border-color: dimgray;
-  border-style: solid;
-  text-align: center;
+.player1 {
   width: 30%;
-  height: 300px;
+  order: 1;
+}
+
+.player2 {
+  width: 30%;
+  order: 3;
 }
 
 .button {
   margin-left: 10px;
 }
 .output {
-  width: 20%;
+  width: 200px;
   order: 2;
   text-align: center;
   margin: 8px;
