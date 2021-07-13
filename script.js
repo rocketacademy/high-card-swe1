@@ -91,6 +91,8 @@ let player2Card;
 let player1HandRank = [];
 let player2HandRank = [];
 
+let player1CardIndex = 0;
+let player2CardIndex = 0;
 const createCard = (cardInfo) => {
   const suit = document.createElement('div');
   suit.classList.add('suit', cardInfo.cardColour);
@@ -101,11 +103,16 @@ const createCard = (cardInfo) => {
   name.innerText = cardInfo.displayName;
 
   const card = document.createElement('div');
-  card.classList.add('card');
-
+  if (playersTurn === 1) {
+    card.classList.add('P1', 'card', `${player1CardIndex}`);
+    player1CardIndex += 1;
+  }
+  else {
+    card.classList.add('P2', 'card', `${player2CardIndex}`);
+    player2CardIndex += 1;
+  }
   card.appendChild(name);
   card.appendChild(suit);
-
   return card;
 };
 let cardContainer1;
@@ -114,13 +121,24 @@ const player1Click = () => {
   if (playersTurn === 1) {
     // Pop player 1's card metadata from the deck
     player1Card = deck.pop();
-    player1HandRank.push(player1Card.rank);
     // Create card element from card metadata
     const cardElement = createCard(player1Card);
     // Append the card element to the card container
     cardContainer1.appendChild(cardElement);
+    const p1CardOrder = cardElement.parentNode;
+    console.log(p1CardOrder);
+    if (player1Card.rank > player1HandRank[0]) {
+      cardElement.parentNode
+        .insertBefore(p1CardOrder.lastChild, p1CardOrder.firstChild);
+    }
+    else if (player1Card.rank < player1HandRank[player1HandRank.length - 1]) {
+      cardElement.parentNode
+        .insertBefore(p1CardOrder.lastChild, p1CardOrder.firstChild.nextSibling);
+    }
     // Switch to player 2's turn
+    player1HandRank.push(player1Card.rank);
     playersTurn = 2;
+    player1HandRank.sort((a, b) => b - a);
   }
 };
 // Create game info div as global value
@@ -144,14 +162,20 @@ const player2Click = () => {
     // Append card element to card container
     cardContainer2.appendChild(cardElement);
 
+    const p2CardOrder = cardElement.parentNode;
+    console.log(p2CardOrder);
+    if (player2Card.rank > player2HandRank[0]) {
+      cardElement.parentNode
+        .insertBefore(p2CardOrder.lastChild, p2CardOrder.firstChild);
+    }
+
     // Switch to player 1's turn
     playersTurn = 1;
+    player2HandRank.sort((a, b) => b - a);
   }
 };
 
 const faceOffFunc = () => {
-  player1HandRank.sort((a, b) => b - a);
-  player2HandRank.sort((a, b) => b - a);
   if ((player1HandRank[0] - player1HandRank[player1HandRank.length - 1])
   > (player2HandRank[0] - player2HandRank[player2HandRank.length - 1])) {
     output('player 1 wins');
@@ -165,6 +189,8 @@ const faceOffFunc = () => {
   cardContainer2.innerHTML = '';
   player1HandRank = [];
   player2HandRank = [];
+  player1CardIndex = 0;
+  player2CardIndex = 0;
 };
 
 const initGame = () => {
