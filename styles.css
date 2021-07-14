@@ -1,3 +1,89 @@
 body {
   background-color: pink;
+  text-align: center;
+}
+.card {
+  margin: 20px;
+  padding: 10px;
+  background-color: white;
+  border: solid 2px;
+  border-color: black;
+  width: 50px;
+  height: 80px;
+  text-align: center;
+  border-radius: 8px;
+  display: inline-block;
+}
+
+.suit {
+  margin: 5px;
+  font-size: 20px;
+}
+
+.name {
+  margin: 5px;
+  font-size: 24px;
+  font-weight: bold;
+  font-family: sans-serif;
+}
+
+.red {
+  color: red;
+}
+.black {
+  color: black;
+}
+#main-container {
+  display: flex;
+  justify-content: center;
+}
+.card-container {
+  margin: auto;
+  background: linear-gradient(45deg, gray, darkgray);
+  border-radius: 8px;
+  border-color: dimgray;
+  border-style: solid;
+  text-align: center;
+  height: 300px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+}
+
+.player1 {
+  width: 30%;
+  order: 1;
+}
+
+.player2 {
+  width: 30%;
+  order: 3;
+}
+
+.button {
+  margin: 10px;
+}
+/* .output {
+  width: 300px;
+  order: 2;
+  text-align: center;
+  margin: 8px;
+} */
+
+.output {
+  text-align: left;
+  font-size: medium;
+  order: 2;
+  width: 300px;
+  background-color: navy;
+  color: white;
+  font-family: monospace;
+  margin: 20px 20px 60px 20px;
+  padding: 10px;
+  border: solid 2px;
+  border-color: black;
+  border-radius: 3px;
+}
+
+.high-low {
+  border: solid 3px;
+  border-color: gold;
 }
