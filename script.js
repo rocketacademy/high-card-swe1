@@ -86,6 +86,11 @@ const output = (message) => {
 };
 
 const player1Click = (event) => {
+  player1Button.disabled = true;
+  setTimeout(() => {
+    if (player1Hand.length < drawCount.value) {
+      player1Button.disabled = false; }
+  }, 500);
   // if end game reached, clear hands and boards and re-start
   if (gameEnd) {
     gameInfo.innerHTML = '';
@@ -132,6 +137,11 @@ const player1Click = (event) => {
 };
 
 const player2Click = (event) => {
+  player2Button.disabled = true;
+  setTimeout(() => {
+    if (player2Hand.length < drawCount.value) {
+      player2Button.disabled = false; }
+  }, 500);
   // if end game reached, clear hands and boards and re-start
   if (gameEnd) {
     gameInfo.innerHTML = '';
