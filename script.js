@@ -89,6 +89,10 @@ let player1Wins = 0;
 let player2Wins = 0;
 let deck = shuffleCards(makeDeck());
 let isStartOfGame = true;
+
+let canClick = true;
+const delayInMs = 100;
+
 const cardContainer1 = document.createElement('div');
 const cardContainer2 = document.createElement('div');
 
@@ -204,24 +208,27 @@ const player1Click = () => {
   {
     return;
   }
-  if (playersTurn === 1) {
+  if (playersTurn === 1 && canClick === true) {
+    canClick = false;
     isStartOfGame = false;
     // Pop player 1's card metadata from the deck
-    // const player1Card = deck.pop();
-    cardContainer1.innerHTML = '';
-    player1Cards = [];
-    player1Cards = drawMultipleCards(numCardsToDraw);
-    console.log(`num of cards ${player1Cards.length}`);
-    player1Cards = orderCards(player1Cards);
-    console.log(`num of cards ordered ${player1Cards.length}`);
-    // Create card element from card metadata
-    for (let i = 0; i < player1Cards.length; i += 1)
-    {
-      const cardElement = createCard(player1Cards[i]);
-      cardContainer1.appendChild(cardElement);
-    }
-    // Switch to player 2's turn
-    playersTurn = 2;
+    setTimeout(() => {
+      cardContainer1.innerHTML = '';
+      player1Cards = [];
+      player1Cards = drawMultipleCards(numCardsToDraw);
+
+      player1Cards = orderCards(player1Cards);
+
+      // Create card element from card metadata
+      for (let i = 0; i < player1Cards.length; i += 1)
+      {
+        const cardElement = createCard(player1Cards[i]);
+        cardContainer1.appendChild(cardElement);
+      }
+      // Switch to player 2's turn
+      playersTurn = 2;
+      canClick = true;
+    }, delayInMs);
   }
 };
 
@@ -230,41 +237,43 @@ const player2Click = () => {
   {
     return;
   }
-  if (playersTurn === 2) {
-    console.log('inPlayer2');
+  if (playersTurn === 2 && canClick === true) {
+    canClick = false;
+    setTimeout(() => { console.log('inPlayer2');
 
-    cardContainer2.innerHTML = '';
-    player2Cards = [];
-    player2Cards = drawMultipleCards(numCardsToDraw);
-    player2Cards = orderCards(player2Cards);
-    // Pop player 2's card metadata from the deck
-    for (let i = 0; i < player2Cards.length; i += 1)
-    {
-      const cardElement = createCard(player2Cards[i]);
-      cardContainer2.appendChild(cardElement);
-    }
+      cardContainer2.innerHTML = '';
+      player2Cards = [];
+      player2Cards = drawMultipleCards(numCardsToDraw);
+      player2Cards = orderCards(player2Cards);
+      // Pop player 2's card metadata from the deck
+      for (let i = 0; i < player2Cards.length; i += 1)
+      {
+        const cardElement = createCard(player2Cards[i]);
+        cardContainer2.appendChild(cardElement);
+      }
 
-    const oneMinusTwo = calcDifference(player1Cards) - calcDifference(player2Cards);
+      const oneMinusTwo = calcDifference(player1Cards) - calcDifference(player2Cards);
 
-    // Switch to player 1's turn
-    playersTurn = 1;
+      // Switch to player 1's turn
+      playersTurn = 1;
 
-    // Determine and output winner
-    if (oneMinusTwo > 0) {
-      output('player 1 wins');
-      player1Wins += 1;
-    } else if (oneMinusTwo < 0) {
-      output('player 2 wins');
-      player2Wins += 1;
-    } else {
-      output('tie');
-    }
+      // Determine and output winner
+      if (oneMinusTwo > 0) {
+        output('player 1 wins');
+        player1Wins += 1;
+      } else if (oneMinusTwo < 0) {
+        output('player 2 wins');
+        player2Wins += 1;
+      } else {
+        output('tie');
+      }
+      canClick = true;
+    }, delayInMs);
   }
 };
 // ===DOM Manipulation===
 
 const initGame = () => {
-  // TODO: make textInput into function?
   const textInput = document.createElement('input');
 
   textInput.type = 'text';
@@ -276,12 +285,6 @@ const initGame = () => {
   {
     if (isStartOfGame) {
       textInput.placeholder = 'key in handsize';
-      const number = Number(textInput.value);
-      if (Number.isNaN(number))
-      {
-        textInput.value = '';
-        textInput.placeholder = 'key in handsize';
-      }
       numCardsToDraw = Number(textInput.value);
     }
     else {
