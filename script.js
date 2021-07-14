@@ -91,8 +91,15 @@ let player2Card;
 let player1HandRank = [];
 let player2HandRank = [];
 
-let player1CardIndex = 0;
-let player2CardIndex = 0;
+let player1HandLength = 0;
+let player2HandLength = 0;
+
+let canClick = true;
+let cardContainer1;
+let cardContainer2;
+let inputMaxCards;
+let submitButton;
+// let maxCards = 0;
 const createCard = (cardInfo) => {
   const suit = document.createElement('div');
   suit.classList.add('suit', cardInfo.cardColour);
@@ -104,41 +111,48 @@ const createCard = (cardInfo) => {
 
   const card = document.createElement('div');
   if (playersTurn === 1) {
-    card.classList.add('P1', 'card', `${player1CardIndex}`);
-    player1CardIndex += 1;
+    card.classList.add('P1', 'card');
   }
   else {
-    card.classList.add('P2', 'card', `${player2CardIndex}`);
-    player2CardIndex += 1;
+    card.classList.add('P2', 'card');
   }
   card.appendChild(name);
   card.appendChild(suit);
   return card;
 };
-let cardContainer1;
-let cardContainer2;
 const player1Click = () => {
-  if (playersTurn === 1) {
+  if (playersTurn === 1 && canClick === true) {
+    canClick = false;
+    // ONLY EXECUTE BELOW IF CURRENT CARDS(player1HandRank.length) IS LESS THAN LIMIT
     // Pop player 1's card metadata from the deck
-    player1Card = deck.pop();
-    // Create card element from card metadata
-    const cardElement = createCard(player1Card);
-    // Append the card element to the card container
-    cardContainer1.appendChild(cardElement);
-    const p1CardOrder = cardElement.parentNode;
-    console.log(p1CardOrder);
-    if (player1Card.rank > player1HandRank[0]) {
-      cardElement.parentNode
-        .insertBefore(p1CardOrder.lastChild, p1CardOrder.firstChild);
-    }
-    else if (player1Card.rank < player1HandRank[player1HandRank.length - 1]) {
-      cardElement.parentNode
-        .insertBefore(p1CardOrder.lastChild, p1CardOrder.firstChild.nextSibling);
-    }
-    // Switch to player 2's turn
-    player1HandRank.push(player1Card.rank);
-    playersTurn = 2;
-    player1HandRank.sort((a, b) => b - a);
+    setTimeout(() => {
+      player1Card = deck.pop();
+      player1HandLength += 1;
+      // Create card element from card metadata
+      const cardElement = createCard(player1Card);
+      // Append the card element to the card container
+      cardContainer1.appendChild(cardElement);
+      const p1CardOrder = cardElement.parentNode;
+      console.log(p1CardOrder.childNodes);
+      if (player1Card.rank > player1HandRank[0]) {
+        cardElement.parentNode
+          .insertBefore(p1CardOrder.lastChild, p1CardOrder.firstChild);
+        if (player1HandLength >= 3) {
+          cardElement.parentNode
+            .insertBefore(p1CardOrder.childNodes[2],
+              p1CardOrder.childNodes[1]);
+        }
+      }
+      else if (player1Card.rank < player1HandRank[player1HandRank.length - 1]) {
+        cardElement.parentNode
+          .insertBefore(p1CardOrder.lastChild, p1CardOrder.firstChild.nextSibling);
+      }
+      // Switch to player 2's turn
+      player1HandRank.push(player1Card.rank);
+      playersTurn = 2;
+      canClick = true;
+      player1HandRank.sort((a, b) => b - a);
+    }, 500);
   }
 };
 // Create game info div as global value
@@ -153,25 +167,37 @@ const output = (message) => {
 };
 const player2Click = () => {
   if (playersTurn === 2) {
+    canClick = false;
     // Pop player 2's card metadata from the deck
-    player2Card = deck.pop();
-    player2HandRank.push(player2Card.rank);
+    setTimeout(() => {
+      player2Card = deck.pop();
+      player2HandLength += 1;
+      // Create card element from card metadata
+      const cardElement = createCard(player2Card);
+      // Append card element to card container
+      cardContainer2.appendChild(cardElement);
 
-    // Create card element from card metadata
-    const cardElement = createCard(player2Card);
-    // Append card element to card container
-    cardContainer2.appendChild(cardElement);
-
-    const p2CardOrder = cardElement.parentNode;
-    console.log(p2CardOrder);
-    if (player2Card.rank > player2HandRank[0]) {
-      cardElement.parentNode
-        .insertBefore(p2CardOrder.lastChild, p2CardOrder.firstChild);
-    }
-
-    // Switch to player 1's turn
-    playersTurn = 1;
-    player2HandRank.sort((a, b) => b - a);
+      const p2CardOrder = cardElement.parentNode;
+      console.log(p2CardOrder);
+      if (player2Card.rank > player2HandRank[0]) {
+        cardElement.parentNode
+          .insertBefore(p2CardOrder.lastChild, p2CardOrder.firstChild);
+        if (player2HandLength >= 3) {
+          cardElement.parentNode
+            .insertBefore(p2CardOrder.childNodes[2],
+              p2CardOrder.childNodes[1]);
+        }
+      }
+      else if (player2Card.rank < player2HandRank[player2HandRank.length - 1]) {
+        cardElement.parentNode
+          .insertBefore(p2CardOrder.lastChild, p2CardOrder.firstChild.nextSibling);
+      }
+      // Switch to player 1's turn
+      playersTurn = 1;
+      canClick = true;
+      player2HandRank.push(player2Card.rank);
+      player2HandRank.sort((a, b) => b - a);
+    }, 500);
   }
 };
 
@@ -189,11 +215,12 @@ const faceOffFunc = () => {
   cardContainer2.innerHTML = '';
   player1HandRank = [];
   player2HandRank = [];
-  player1CardIndex = 0;
-  player2CardIndex = 0;
+  player1HandLength = 0;
+  player2HandLength = 0;
 };
 
 const initGame = () => {
+  // maxCards = inputMaxCards.value;
   cardContainer1 = document.createElement('div');
   cardContainer1.classList.add('card-container1');
   document.body.appendChild(cardContainer1);
@@ -222,4 +249,13 @@ const initGame = () => {
   document.body.appendChild(gameInfo);
 };
 
-initGame();
+const gameSetup = () => {
+  inputMaxCards = document.createElement('input');
+  inputMaxCards.type = 'text';
+  document.body.appendChild(inputMaxCards);
+  submitButton = document.createElement('button');
+  submitButton.innerText = 'Submit';
+  submitButton.addEventListener('click', initGame);
+  document.body.appendChild(submitButton);
+};
+gameSetup();
