@@ -122,10 +122,10 @@ const createCard = (cardInfo) => {
 };
 const player1Click = () => {
   if (playersTurn === 1 && canClick === true) {
-    canClick = false;
     // ONLY EXECUTE BELOW IF CURRENT CARDS(player1HandLength) IS LESS THAN LIMIT
     if (player1HandLength < maxCards) {
-    // Pop player 1's card metadata from the deck
+      canClick = false;
+      // Pop player 1's card metadata from the deck
       setTimeout(() => {
         player1Card = deck.pop();
         player1HandLength += 1;
@@ -169,10 +169,10 @@ const output = (message) => {
 };
 const player2Click = () => {
   if (playersTurn === 2) {
-    canClick = false;
     // ONLY EXECUTE BELOW IF CURRENT CARDS(player1HandLength) IS LESS THAN LIMIT
     if (player2HandLength < maxCards) {
-    // Pop player 2's card metadata from the deck
+      canClick = false;
+      // Pop player 2's card metadata from the deck
       setTimeout(() => {
         player2Card = deck.pop();
         player2HandLength += 1;
@@ -207,21 +207,24 @@ const player2Click = () => {
 };
 
 const faceOffFunc = () => {
-  if ((player1HandRank[0] - player1HandRank[player1HandRank.length - 1])
+  if (canClick === true) {
+    if ((player1HandRank[0] - player1HandRank[player1HandRank.length - 1])
   > (player2HandRank[0] - player2HandRank[player2HandRank.length - 1])) {
-    output('player 1 wins');
-  } else if ((player1HandRank[0] - player1HandRank[player1HandRank.length - 1])
+      output('player 1 wins');
+    } else if ((player1HandRank[0] - player1HandRank[player1HandRank.length - 1])
   < (player2HandRank[0] - player2HandRank[player2HandRank.length - 1])) {
-    output('player 2 wins');
-  } else {
-    output('tie');
+      output('player 2 wins');
+    } else {
+      output('tie');
+    }
+    cardContainer1.innerHTML = '';
+    cardContainer2.innerHTML = '';
+    player1HandRank = [];
+    player2HandRank = [];
+    player1HandLength = 0;
+    player2HandLength = 0;
+    canClick = true;
   }
-  cardContainer1.innerHTML = '';
-  cardContainer2.innerHTML = '';
-  player1HandRank = [];
-  player2HandRank = [];
-  player1HandLength = 0;
-  player2HandLength = 0;
 };
 
 const initGame = () => {
