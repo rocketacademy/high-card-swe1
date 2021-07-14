@@ -1,3 +1,64 @@
 body {
   background-color: pink;
+  text-align: center;
+}
+
+.card {
+  margin: 50px 30px 20px 30px;
+  padding: 10px;
+  background-color: white;
+  width: 50px;
+  text-align: center;
+  border-radius: 8px;
+  display: inline-block;
+}
+
+.suit {
+  margin: 5px;
+  font-size: 20px;
+}
+
+.name {
+  margin: 5px;
+  font-size: 24px;
+  font-weight: bold;
+  font-family: sans-serif;
+}
+
+.red {
+  color: red;
+}
+
+.black {
+  color: black;
+}
+
+.card-container1 {
+  margin: auto;
+  background: rgb(13, 139, 61);
+  border-radius: 8px;
+  border-color: blue;
+  border-style: solid;
+  text-align: center;
+  width: 600px;
+  height: 200px;
+}
+
+.card-container2 {
+  margin: auto;
+  background: rgb(13, 139, 61);
+  border-radius: 8px;
+  border-color: blue;
+  border-style: solid;
+  text-align: center;
+  width: 600px;
+  height: 200px;
+}
+
+.button {
+  margin-left: 10px;
+}
+.output {
+  text-align: center;
+  margin: 8px;
 }
