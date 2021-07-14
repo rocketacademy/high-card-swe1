@@ -84,9 +84,11 @@ let playersTurn = 1;
 // Use let for player1Card object because player1Card will be reassigned
 let player1Card;
 
-// create a shuffled deck
+// const canClick = true;
 
-const deck = shuffleCards(makeDeck());
+// create a shuffled deck
+let deck = shuffleCards(makeDeck());
+
 // create two buttons
 const player1Button = document.createElement('button');
 player1Button.className = 'button';
@@ -99,10 +101,15 @@ player2Button.innerText = 'Player 2 Draw';
 document.body.appendChild(player2Button);
 
 // create card container
-let cardContainer;
-cardContainer = document.createElement('div');
-cardContainer.classList.add('card-container');
-document.body.appendChild(cardContainer);
+let cardContainer1;
+cardContainer1 = document.createElement('div');
+cardContainer1.classList.add('card-container1');
+document.body.appendChild(cardContainer1);
+
+let cardContainer2;
+cardContainer2 = document.createElement('div');
+cardContainer2.classList.add('card-container2');
+document.body.appendChild(cardContainer2);
 
 const gameInfo = document.createElement('div');
 const output = (message) => {
@@ -126,48 +133,70 @@ const createCard = (cardInfo) => {
 
   return card;
 };
+// create array to store players' card
+let player1Arr = [];
+let player2Arr = [];
+
+// create fucntion to get score
+// https://stackoverflow.com/questions/4020796/finding-the-max-value-of-an-attribute-in-an-array-of-objects
+const getScore = (playerArr) => {
+  const highestScore = Math.max.apply(Math, playerArr.map((o) => o.rank));
+  const lowestScore = Math.min.apply(Math, playerArr.map((o) => o.rank));
+  const score = Number(String(highestScore) - String(lowestScore));
+  return score;
+};
 
 // Add an event listener on player 1's button to draw card and switch
 // to player 2's turn
 const player1Click = () => {
   if (playersTurn === 1) {
-    // Pop player 1's card metadata from the deck
-    player1Card = deck.pop();
-
-    // Create card element from card metadata
-    const cardElement = createCard(player1Card);
     // Empty cardContainer in case this is not the 1st round of gameplay
-    cardContainer.innerHTML = '';
-    // Append the card element to the card container
-    cardContainer.appendChild(cardElement);
+    cardContainer1.innerHTML = '';
+    // player1Arr = '';
+    for (let i = 0; i < 3; i += 1) {
+    // Pop player 1's card metadata from the deck
+      player1Card = deck.pop();
+      player1Arr.push(player1Card);
+      // Create card element from card metadata
+      const cardElement = createCard(player1Card);
+      // Append the card element to the card container
+      cardContainer1.appendChild(cardElement);
+    }
     output('Player 2\'s turn!');
     // Switch to player 2's turn
     playersTurn = 2;
   }
 };
-
 const player2Click = () => {
   if (playersTurn === 2) {
+    // Empty cardContainer in case this is not the 1st round of gameplay
+    cardContainer2.innerHTML = '';
+    // player2Arr = '';
+    for (let i = 0; i < 3; i += 1) {
     // Pop player 2's card metadata from the deck
-    const player2Card = deck.pop();
-
-    // Create card element from card metadata
-    const cardElement = createCard(player2Card);
-    // Append card element to card container
-    cardContainer.appendChild(cardElement);
-
+      const player2Card = deck.pop();
+      player2Arr.push(player2Card);
+      // Create card element from card metadata
+      const cardElement = createCard(player2Card);
+      // Append card element to card container
+      cardContainer2.appendChild(cardElement);
+    }
     // Switch to player 1's turn
     playersTurn = 1;
-
-    // Determine and output winner
-    if (player1Card.rank > player2Card.rank) {
-      output('Player 1 wins. Player 1\'s turn now!');
-    } else if (player1Card.rank < player2Card.rank) {
-      output('Player 2 wins. Player 1\'s turn now!');
-    } else {
-      output('tie');
-    }
   }
+  // Determine and output winner
+  if (getScore(player1Arr) > getScore(player2Arr)) {
+    output('Player 1 wins. Player 1\'s turn now!');
+  } else if (getScore(player1Arr) < getScore(player2Arr)) {
+    output('Player 2 wins. Player 1\'s turn now!');
+  } else {
+    output('tie');
+  }
+  if (deck.length < 6) {
+    deck = shuffleCards(makeDeck());
+  }
+  player1Arr = [];
+  player2Arr = [];
 };
 
 const initGame = () => {
@@ -187,3 +216,49 @@ const initGame = () => {
 };
 
 initGame();
+
+// const player1Click = () => {
+//   if (playersTurn === 1 && canClick === true) {
+//     canClick = false;
+
+//     setTimeout(() => {
+//       player1Card = deck.pop();
+
+//       const cardElement = createCard(player1Card);
+
+//       // in case this is not the 1st time
+//       // in the entire app,
+//       // empty the card container
+//       cardContainer.innerHTML = '';
+
+//       cardContainer.appendChild(cardElement);
+//       output('Player 2\'s turn!');
+//       playersTurn = 2;
+//       canClick = true;
+//     }, 1000);
+//   }
+// };
+
+// const player2Click = () => {
+//   if (playersTurn === 2 && canClick === true) {
+//     canClick = false;
+
+//     setTimeout(() => {
+//       const player2Card = deck.pop();
+//       const cardElement = createCard(player2Card);
+
+//       cardContainer.appendChild(cardElement);
+
+//       playersTurn = 1;
+//       canClick = true;
+
+//       if (player1Card.rank > player2Card.rank) {
+//         output('Player 1 wins. Player 1\'s turn now!');
+//       } else if (player1Card.rank < player2Card.rank) {
+//         output('Player 2 wins. Player 1\'s turn now!');
+//       } else {
+//         output('tie');
+//       }
+//     }, 1000);
+//   }
+// };

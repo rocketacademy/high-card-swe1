@@ -4,7 +4,7 @@ body {
 }
 
 .card {
-  margin: 20px 30px 20px 30px;
+  margin: 50px 30px 20px 30px;
   padding: 10px;
   background-color: white;
   width: 50px;
@@ -33,14 +33,25 @@ body {
   color: black;
 }
 
-.card-container {
+.card-container1 {
   margin: auto;
   background: rgb(13, 139, 61);
   border-radius: 8px;
   border-color: blue;
   border-style: solid;
   text-align: center;
-  width: 300px;
+  width: 600px;
+  height: 200px;
+}
+
+.card-container2 {
+  margin: auto;
+  background: rgb(13, 139, 61);
+  border-radius: 8px;
+  border-color: blue;
+  border-style: solid;
+  text-align: center;
+  width: 600px;
   height: 200px;
 }
 
