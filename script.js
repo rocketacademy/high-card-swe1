@@ -1,15 +1,17 @@
-let playersTurn; // matches with starting instructions
 let player1Hand = [];
 let player2Hand = [];
 let scoreDiff;
+let gameEnd = true;
 
 const deck = [];
-const suits = ['hearts', 'diamonds', 'clubs', 'spades'];
+const suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades'];
 const symbols = ['♥', '♦', '♣', '♠'];
 
 const gameInfo = document.createElement('div');
 const cardContainer1 = document.createElement('div');
 const cardContainer2 = document.createElement('div');
+const player1Button = document.createElement('button');
+const player2Button = document.createElement('button');
 const drawCount = document.createElement('input');
 
 // Get a random index ranging from 0 (inclusive) to max (exclusive).
@@ -49,7 +51,7 @@ const generateCard = (cardRank, suit) => {
     displayName: cardDisplay,
     colour: cardColor,
     rank: cardRank,
-    title: `${cardName} of ${suit}`,
+    title: `${cardName} of ${suits[suit]}`,
     highLow: false,
   };
   return card;
@@ -80,51 +82,98 @@ const highLow = (playerHand) => {
 
 // DOM output helper
 const output = (message) => {
-  gameInfo.innerHTML = message;
+  gameInfo.innerHTML += `<br>${message}`;
 };
 
-const player1Click = () => {
-  if (playersTurn === 1) {
+const player1Click = (event) => {
+  // if end game reached, clear hands and boards and re-start
+  if (gameEnd) {
+    gameInfo.innerHTML = '';
     cardContainer1.innerText = '';
     cardContainer2.innerText = '';
     player1Hand = [];
     player2Hand = [];
-    scoreDiff = 0;
     drawCount.disabled = true;
-    for (let i = 0; i < drawCount.value; i += 1) {
-      const card = deal();
-      player1Hand.push(card);
-    }
-    scoreDiff += highLow(player1Hand);
+    gameEnd = false;
+    scoreDiff = 0;
+  }
+  if (player1Hand.length < drawCount.value) {
+  // draw and add card to hand
+    const card = deal();
+    player1Hand.push(card);
+    cardContainer1.innerText = '';
     const cardElement = printHand(player1Hand);
     cardContainer1.appendChild(cardElement);
+    output(`Player 1 draws the <strong>${card.title}</strong>.`);
+  }
+  if (player1Hand.length == drawCount.value) {
+    const score = highLow(player1Hand);
+    scoreDiff += score;
+    cardContainer1.innerText = '';
+    const cardElement = printHand(player1Hand);
+    cardContainer1.appendChild(cardElement);
+    output(`Player 1's largest difference is <strong>${score}</strong>.`);
+    player1Button.disabled = true;
 
-    output(`Player 1's score is <strong>${scoreDiff}</strong>, let's see if you can beat that!`);
-    playersTurn = 2;
+    if (player2Hand.length == drawCount.value) {
+      gameEnd = true;
+      drawCount.disabled = false;
+      player1Button.disabled = false;
+      player2Button.disabled = false;
+      if (scoreDiff > 0) {
+        output(`Player 1 wins by ${scoreDiff}!`);
+      } else if (scoreDiff < 0) {
+        output(`Player 2 wins by ${Math.abs(scoreDiff)}!`);
+      } else {
+        output('Tie!');
+      }
+    }
   }
 };
 
-const player2Click = () => {
-  if (playersTurn === 2) {
-    for (let i = 0; i < drawCount.value; i += 1) {
-      const card = deal();
-      player2Hand.push(card);
-    }
-    // Append the card element to the card container
-    const score2 = highLow(player2Hand);
-    scoreDiff -= score2;
-
+const player2Click = (event) => {
+  // if end game reached, clear hands and boards and re-start
+  if (gameEnd) {
+    gameInfo.innerHTML = '';
+    cardContainer1.innerText = '';
+    cardContainer2.innerText = '';
+    player1Hand = [];
+    player2Hand = [];
+    drawCount.disabled = true;
+    gameEnd = false;
+    scoreDiff = 0;
+  }
+  if (player2Hand.length < drawCount.value) {
+  // draw and add card to hand
+    const card = deal();
+    player2Hand.push(card);
+    cardContainer2.innerText = '';
     const cardElement = printHand(player2Hand);
     cardContainer2.appendChild(cardElement);
+    output(`Player 2 draws the <strong>${card.title}</strong>.`);
+  }
+  if (player2Hand.length == drawCount.value) {
+    const score = highLow(player2Hand);
+    scoreDiff -= score;
+    cardContainer2.innerText = '';
+    const cardElement = printHand(player2Hand);
+    cardContainer2.appendChild(cardElement);
+    output(`Player 2's largest difference is <strong>${score}</strong>.`);
+    player2Button.disabled = true;
 
-    playersTurn = 1;
-    drawCount.disabled = false;
-    if (scoreDiff > 0) {
-      output(`You scored <strong>${score2}</strong>. Player 1 wins by ${scoreDiff}!`);
-    } else if (scoreDiff < 0) {
-      output(`You scored <strong>${score2}</strong>. You win by ${Math.abs(scoreDiff)}!`);
-    } else {
-      output(`You scored <strong>${score2}</strong>. Tie!`);
+    if (player1Hand.length == drawCount.value) {
+      gameEnd = true;
+      drawCount.disabled = false;
+      player1Button.disabled = false;
+      player2Button.disabled = false;
+      if (scoreDiff > 0) {
+        output(`<strong>Player 1 wins by ${scoreDiff}!</strong>`);
+      } else if (scoreDiff < 0) {
+        output(`<strong>Player 2 wins by ${Math.abs(scoreDiff)}!</strong>`);
+      } else {
+        output('<strong>Tie!</strong>');
+      }
+      output('Draw to start a new game!');
     }
   }
 };
@@ -161,7 +210,6 @@ const printCard = (cardInfo) => {
 };
 
 const initGame = () => {
-  playersTurn = 1;
   scoreDiff = 0;
   makeDeck();
 
@@ -174,9 +222,9 @@ const initGame = () => {
   mainContainer.appendChild(player1Container);
   mainContainer.appendChild(player2Container);
   document.body.appendChild(mainContainer);
-  const player1Button = document.createElement('button');
+
   player1Button.className = 'button';
-  const player2Button = document.createElement('button');
+
   player2Button.className = 'button';
 
   gameInfo.className = 'output';
@@ -206,7 +254,7 @@ const initGame = () => {
   player2Button.addEventListener('click', player2Click);
 
   // fill game info div with starting instructions
-  gameInfo.innerText = 'It\'s Player 1\'s turn. Click to draw a card!';
+  gameInfo.innerText = 'Decide on how many cards to draw, click draw to start the game!';
 };
 
 initGame();
