@@ -13,6 +13,9 @@ let playersTurn = 1; // matches with starting instructions
 let player1Card;
 let player2Card;
 
+let countDraws1 = 0;
+let countDraws2 = 0;
+
 // //mainContainer DOM element as a global variable
 // let mainContainer;
 // mainContainer = document.createElement("div");
@@ -25,6 +28,20 @@ cardContainer = document.createElement("div");
 cardContainer.classList.add("card-container");
 // append cardContainer to mainContainer
 document.body.appendChild(cardContainer);
+
+// cardContainer1 DOM for player1card
+let cardContainer1;
+cardContainer1 = document.createElement("div");
+cardContainer1.classList.add("card-container1");
+//append cardContiner1 to cardContainer
+cardContainer.appendChild(cardContainer1);
+
+// cardContainer2 DOM for player1card
+let cardContainer2;
+cardContainer2 = document.createElement("div");
+cardContainer2.classList.add("card-container2");
+//append cardContiner2 to cardContainer
+cardContainer.appendChild(cardContainer2);
 
 // card information
 const suits = ["Hearts", "Diamonds", "Clubs", "Spades"];
@@ -141,11 +158,17 @@ const player1Click = () => {
     card.appendChild(name);
     card.appendChild(suit);
 
-    // Empty cardContainer in case this is not the 1st round of gameplay
-    cardContainer.innerHTML = "";
+    // Increment countDraws1
+    countDraws1 += 1;
 
+    // Empty cardContainer in case this is not the 1st round of gameplay
+    cardContainer1.innerHTML = "";
+
+    if (countDraws1 > countDraws2) {
+      cardContainer2.innerHTML = "";
+    }
     // If this is the first round, display the card
-    cardContainer.appendChild(card);
+    cardContainer1.appendChild(card);
 
     // Switch to player 2's turn
     playersTurn = 2;
@@ -174,8 +197,13 @@ const player2Click = () => {
     card.appendChild(name);
     card.appendChild(suit);
 
-    // display the card
-    cardContainer.appendChild(card);
+    // Increment countDraws2
+    countDraws2 += 1;
+
+    // Empty cardContainer in case this is not the 1st round of gameplay
+    cardContainer2.innerHTML = "";
+    // If this is the first round, display the card
+    cardContainer2.appendChild(card);
 
     // winning conditions
     // If player1card has a higher rank, output that they win and increment score
@@ -204,7 +232,7 @@ const initGame = () => {
   shuffledDeck = shuffleCards(newDeck);
 
   // fill game info div with starting instructions
-  gameInfo.innerText = "Its player 1 turn. Click to draw a card!";
+  gameInfo.innerText = "Its player 1's turn. Click to draw a card!";
   gameInfo.classList.add("output");
   document.body.appendChild(gameInfo);
 
