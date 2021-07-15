@@ -115,6 +115,10 @@ const output = (message) => {
   gameInfo.innerText = message;
 };
 
+const scoreboardOutput = (score1, score2) => {
+  scoreBoard.innerText = `Scoreboard: Player 1: ${score1}  Player 2: ${score2}`;
+};
+
 // Player action call backs
 const player1Click = () => {
   if (playersTurn === 1) {
@@ -178,12 +182,16 @@ const player2Click = () => {
     if (player1Card.rank > player2Card.rank) {
       output("player 1 wins");
       player1score += 1;
+      //scoreboardOutput(player1score, player2score);
     } else if (player1Card.rank < player2Card.rank) {
       output("player 2 wins");
       player2score += 1;
+      //scoreboardOutput(player1score, player2score);
     } else {
       output("tie");
     }
+    //Update scoreboard output
+    scoreboardOutput(player1score, player2score);
   }
 };
 
@@ -218,6 +226,5 @@ const initGame = () => {
 initGame();
 
 // Output scoreboard
-scoreBoard.innerText = `Scoreboard: Player 1: ${player1score}  Player 2: ${player2score}`;
 scoreBoard.classList.add("score-board");
 document.body.appendChild(scoreBoard);
