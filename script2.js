@@ -9,6 +9,19 @@ const scoreBoard = document.createElement("div");
 let player1score = 0;
 let player2score = 0;
 
+//playerinfo objects
+let player1_Info = {
+  cards: [],
+  highLowScore: 0,
+  wins: 0,
+};
+
+let player2_Info = {
+  cards: [],
+  highLowScore: 0,
+  wins: 0,
+};
+
 let playersTurn = 1; // matches with starting instructions
 let player1Card;
 let player2Card;
@@ -136,11 +149,45 @@ const scoreboardOutput = (score1, score2) => {
   scoreBoard.innerText = `Scoreboard: Player 1: ${score1}  Player 2: ${score2}`;
 };
 
+const highLowScore = (playerInfo) => {
+  //get the cards array from playerInfo object
+  let cardsArray = playerInfo.cards;
+  console.log(cardsArray);
+  // New variable to store card with highest rank
+  let highestCard = "";
+  // New variable to store card with lowest rank
+  let lowestCard = "";
+  let currentCard = "";
+  //sort cards by rank
+  let highestRank = 0;
+  let lowestRank = 13;
+  for (i = 0; i < cardsArray.length; i++) {
+    currentCard = cardsArray[i];
+    console.log("current card:");
+    console.log(currentCard);
+    if (currentCard.rank > highestRank) {
+      highestRank = currentCard.rank;
+    }
+    if (currentCard.rank < lowestRank) {
+      lowestRank = currentCard.rank;
+    }
+  }
+  const highLowScore = highestRank - lowestRank;
+  return highLowScore;
+};
+
 // Player action call backs
 const player1Click = () => {
   if (playersTurn === 1) {
     // Pop player 1's card metadata from the deck
     player1Card = shuffledDeck.pop();
+    // If player already has 2 cards, empty cards aray from player1_info
+    if (player1_Info.cards.length == 2) {
+      player1_Info.cards = [];
+    }
+    // Otherwise, push new card into the cards array of player1_info
+    player1_Info.cards.push(player1Card);
+
     // Create card element from card metadata: create card DOM object - create suit and cardName elements, and append them to card element
     const suit = document.createElement("div");
     suit.classList.add("suit");
@@ -158,16 +205,28 @@ const player1Click = () => {
     card.appendChild(name);
     card.appendChild(suit);
 
+    // If two cards are drawn already, empty cardContainer1
+    if (countDraws1 == 2) {
+      //empty cardContainer1
+      cardContainer1.innerHTML = "";
+      //reset countdraws1
+      countDraws1 = 0;
+    }
+
     // Increment countDraws1
     countDraws1 += 1;
 
-    // Empty cardContainer in case this is not the 1st round of gameplay
-    cardContainer1.innerHTML = "";
+    // If player1 has drawn two cards already, calculate highlowscore and assign it to highLowScore key in player1_Info
+    if (countDraws1 == 2) {
+      player1_Info.highLowScore = highLowScore(player1_Info);
+    }
 
-    if (countDraws1 > countDraws2) {
+    // If player2 has drawn two cards already, empty cardContainer2
+    if (countDraws2 == 2) {
       cardContainer2.innerHTML = "";
     }
-    // If this is the first round, display the card
+
+    // display the card on cardcontainer1
     cardContainer1.appendChild(card);
 
     // Switch to player 2's turn
@@ -179,6 +238,13 @@ const player2Click = () => {
   if (playersTurn === 2) {
     const player2Card = shuffledDeck.pop();
     playersTurn = 1;
+
+    // If player already has 2 cards, empty cards aray from player1_info
+    if (player2_Info.cards.length == 2) {
+      player2_Info.cards = [];
+    }
+    // Otherwise, push new card into the cards array of player1_info
+    player2_Info.cards.push(player2Card);
 
     // Create card element from card metadata: create card DOM object - create suit and cardName elements, and append them to card element
     const suit = document.createElement("div");
@@ -197,21 +263,32 @@ const player2Click = () => {
     card.appendChild(name);
     card.appendChild(suit);
 
+    // If two cards are drawn already, empty cardContainer2
+    if (countDraws2 == 2) {
+      //empty cardContainer1
+      cardContainer2.innerHTML = "";
+      //reset countdraws1
+      countDraws2 = 0;
+    }
+
     // Increment countDraws2
     countDraws2 += 1;
 
-    // Empty cardContainer in case this is not the 1st round of gameplay
-    cardContainer2.innerHTML = "";
-    // If this is the first round, display the card
+    // If player2 has drawn two cards already, calculate highlowscore and assign it to highLowScore key in player1_Info
+    if (countDraws2 == 2) {
+      player2_Info.highLowScore = highLowScore(player2_Info);
+    }
+
+    // display the card
     cardContainer2.appendChild(card);
 
     // winning conditions
-    // If player1card has a higher rank, output that they win and increment score
-    if (player1Card.rank > player2Card.rank) {
+    // If player1card has a higher highlowscore, output that they win and increment score
+    if (player1_Info.highLowScore > player2_Info.highLowScore) {
       output("player 1 wins");
       player1score += 1;
       //scoreboardOutput(player1score, player2score);
-    } else if (player1Card.rank < player2Card.rank) {
+    } else if (player1_Info.highLowScore < player2_Info.highLowScore) {
       output("player 2 wins");
       player2score += 1;
       //scoreboardOutput(player1score, player2score);
