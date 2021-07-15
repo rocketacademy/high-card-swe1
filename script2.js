@@ -17,31 +17,31 @@ let countDraws1 = 0;
 let countDraws2 = 0;
 
 // //mainContainer DOM element as a global variable
-// let mainContainer;
-// mainContainer = document.createElement("div");
-// mainContainer.classList.add("container");
-// document.body.appendChild(mainContainer);
+let mainContainer;
+mainContainer = document.createElement("div");
+mainContainer.classList.add("container");
+document.body.appendChild(mainContainer);
 
-// cardContainer DOM element as a global variable
-let cardContainer;
-cardContainer = document.createElement("div");
-cardContainer.classList.add("card-container");
-// append cardContainer to mainContainer
-document.body.appendChild(cardContainer);
+// // cardContainer DOM element as a global variable
+// let cardContainer;
+// cardContainer = document.createElement("div");
+// cardContainer.classList.add("card-container");
+// // append cardContainer to mainContainer
+// document.body.appendChild(cardContainer);
 
 // cardContainer1 DOM for player1card
 let cardContainer1;
 cardContainer1 = document.createElement("div");
 cardContainer1.classList.add("card-container1");
 //append cardContiner1 to cardContainer
-cardContainer.appendChild(cardContainer1);
+mainContainer.appendChild(cardContainer1);
 
 // cardContainer2 DOM for player1card
 let cardContainer2;
 cardContainer2 = document.createElement("div");
 cardContainer2.classList.add("card-container2");
 //append cardContiner2 to cardContainer
-cardContainer.appendChild(cardContainer2);
+mainContainer.appendChild(cardContainer2);
 
 // card information
 const suits = ["Hearts", "Diamonds", "Clubs", "Spades"];
@@ -231,15 +231,10 @@ const initGame = () => {
   // Shuffle deck
   shuffledDeck = shuffleCards(newDeck);
 
-  // fill game info div with starting instructions
-  gameInfo.innerText = "Its player 1's turn. Click to draw a card!";
-  gameInfo.classList.add("output");
-  document.body.appendChild(gameInfo);
-
   // initialize button functionality
   const buttonContainer = document.createElement("div");
   buttonContainer.classList.add("button-container");
-  document.body.appendChild(buttonContainer);
+  mainContainer.appendChild(buttonContainer);
 
   player1Button.innerText = "Player 1 Draw";
   buttonContainer.appendChild(player1Button);
@@ -249,10 +244,19 @@ const initGame = () => {
 
   player1Button.addEventListener("click", player1Click);
   player2Button.addEventListener("click", player2Click);
+
+  // fill game info div with starting instructions
+  gameInfo.innerText = "Its player 1's turn. Click to draw a card!";
+  gameInfo.classList.add("output");
+  mainContainer.appendChild(gameInfo);
+
+  // const buttonContainer2 = document.createElement("div");
+  // buttonContainer2.classList.add("button-container");
+  // cardContainer2.appendChild(buttonContainer2);
 };
 
 initGame();
 
 // Output scoreboard
 scoreBoard.classList.add("score-board");
-document.body.appendChild(scoreBoard);
+mainContainer.appendChild(scoreBoard);
