@@ -1,3 +1,83 @@
 body {
   background-color: pink;
 }
+.button {
+  margin: 20px;
+  text-align: center;
+}
+.button-container {
+  margin: auto;
+  text-align: center;
+}
+
+.output {
+  text-align: left;
+  width: 300px;
+  background-color: rgb(73, 203, 226);
+  color: black;
+  font-family: ui-serif;
+  text-align: center;
+  margin: auto;
+  padding: 10px;
+  border: solid 2px;
+  border-color: darkslategray;
+  border-radius: 3px;
+}
+
+.container {
+  margin: auto;
+  padding: 50px;
+  background-color: whitesmoke;
+  width: 500px;
+  height: 100px;
+}
+
+.card-container {
+  margin: auto;
+  padding: 20px;
+  background-color: grey;
+  width: 400px;
+  height: 200px;
+  text-align: center;
+  border: solid 2px;
+  border-color: darkslategray;
+  border-radius: 3px;
+}
+.card {
+  margin: auto;
+  padding: 20px;
+  background-color: white;
+  border: solid 2px;
+  border-color: grey;
+  width: 50px;
+  text-align: center;
+  border-radius: 8px;
+  /* display: display-outside; */
+  display: inline-block;
+}
+
+.suit {
+  margin: 5px;
+  font-size: 20px;
+}
+
+.name {
+  margin: 5px;
+  font-size: 20px;
+}
+
+.red {
+  color: red;
+}
+
+.score-board {
+  background-color: white;
+  margin: auto;
+  width: 100px;
+  height: 50px;
+  color: black;
+  border: solid 2px;
+  border-color: rgb(213, 73, 226);
+  border-radius: 3px;
+  padding: 20px;
+}
