@@ -1,5 +1,5 @@
 // Global set up
-const deck = [];
+let deck = [];
 const player1Button = document.createElement("button");
 const player2Button = document.createElement("button");
 const gameInfo = document.createElement("div");
@@ -59,6 +59,9 @@ const makeCard = (cardSuit, cardRank) => {
     cardName = "King";
     cardDisplay = "K";
   }
+  //Default:
+  cardName = cardRank;
+  cardDisplay = cardRank;
 
   //create cardInfo object
   const cardInfo = {
@@ -70,23 +73,10 @@ const makeCard = (cardSuit, cardRank) => {
     rank: cardRank,
   };
 
-  // create card DOM object - create suit and cardName elements, and append them to card element
-  const suit = document.createElement("div");
-  suit.classList.add("suit");
-  suit.innerText = cardInfo.suitSymbol;
+  console.log(cardInfo);
 
-  const cardName = document.createElement("div");
-  cardName.classList.add(cardInfo.displayName, cardInfo.colour);
-  cardName.innerText = cardInfo.rank;
-
-  const card = document.createElement("div");
-  card.classList.add("card");
-
-  card.appendChild(cardName);
-  card.appendChild(suit);
-
-  //return card DOM object
-  return card;
+  //return cardInfo object
+  return cardInfo;
 };
 
 const makeDeck = () => {
@@ -95,9 +85,29 @@ const makeDeck = () => {
   for (let suitIndex = 0; suitIndex < suits.length; suitIndex++) {
     // Loop over 13 ranks
     for (let rankIndex = 0; rankIndex <= 13; rankIndex++) {
-      const newCard = makeCard(suitIndex, rankIndex);
+      const cardInfo = makeCard(suitIndex, rankIndex);
+      console.log(
+        `getting card info for suitIndex ${suitIndex} and rankIndex ${rankIndex}`
+      );
+
+      // create card DOM object - create suit and cardName elements, and append them to card element
+      const suit = document.createElement("div");
+      suit.classList.add("suit");
+      suit.innerText = cardInfo.suitSymbol;
+
+      const name = document.createElement("div");
+      console.log(`display name of card: ${cardInfo.displayName}`);
+      console.log(`colour of card: ${cardInfo.colour}`);
+      name.classList.add(cardInfo.displayName, cardInfo.colour);
+      name.innerText = cardInfo.rank;
+
+      const card = document.createElement("div");
+      card.classList.add("card");
+
+      card.appendChild(name);
+      card.appendChild(suit);
       // Add the new DOM card object to the deck
-      newDeck.push(newCard);
+      newDeck.push(card);
     }
   }
   // Return the completed card deck (i.e. an array of card DOM objects)
@@ -113,7 +123,17 @@ const output = (message) => {
 // Player action call backs
 const player1Click = () => {
   if (playersTurn === 1) {
+    // Pop player 1's card metadata from the deck
     player1Card = deck.pop();
+    // Create card element from card metadata
+    const cardElement = makeCard(player1Card);
+    // Empty cardContainer in case this is not the 1st round of gameplay
+    cardContainer.innerHTML = "";
+
+    // If this is the first round, display the card
+    cardContainer.appendChild(player1Card);
+
+    // Switch to player 2's turn
     playersTurn = 2;
   }
 };
@@ -122,6 +142,9 @@ const player2Click = () => {
   if (playersTurn === 2) {
     const player2Card = deck.pop();
     playersTurn = 1;
+
+    // display the card
+    cardContainer.appendChild(player2Card);
 
     if (player1Card.rank > player2Card.rank) {
       output("player 1 wins");
@@ -135,6 +158,9 @@ const player2Click = () => {
 
 // Game initialisation
 const initGame = () => {
+  // Make deck
+  deck = makeDeck();
+
   // initialize button functionality
   player1Button.innerText = "Player 1 Draw";
   document.body.appendChild(player1Button);
@@ -149,3 +175,5 @@ const initGame = () => {
   gameInfo.innerText = "Its player 1 turn. Click to draw a card!";
   document.body.appendChild(gameInfo);
 };
+
+initGame();
